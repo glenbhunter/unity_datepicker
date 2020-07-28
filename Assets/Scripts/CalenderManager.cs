@@ -11,7 +11,8 @@ public class CalenderManager : MonoBehaviour
     [SerializeField] Text m_CurrentDateText;
     [SerializeField] List<Text> m_DaysOfWeekHeadings;
     public List<CalenderButton> CalenderButtons;
-    
+
+    int m_ClickCount = 0;
 
     private DateTime m_CurrentDate;
 
@@ -43,7 +44,6 @@ public class CalenderManager : MonoBehaviour
 
         // days
 
-
         // get ACTUAL the first day of the month
         DayOfWeek actualDayOfWeek = new DateTime(date.Year, date.Month, 1).DayOfWeek;
 
@@ -57,7 +57,7 @@ public class CalenderManager : MonoBehaviour
         {
             //bool isCurrentMonth = (startDate.Month == DateTime..Month) ? true : false;
             //bool isCurrentDay = (startDate.Date == today.Date) ? true : false;
-            CalenderButtons[i].Setup(startDate.Day, startDate.Month, this);
+            CalenderButtons[i].Setup(startDate.Year, startDate.Month, startDate.Day, this);
 
             if (startDate.Month != date.Month)
                 CalenderButtons[i].DayIsPartOfPreviousMonth();
@@ -83,9 +83,10 @@ public class CalenderManager : MonoBehaviour
         Setup_CalenderGrid(m_CurrentDate, FirstDayOfWeek);
     }
 
-    public void OnClick_SelectedCalenderDay(CalenderButton button, int month, int day)
+    private DateTime startDate;
+    private DateTime endDate;
+    public void OnClick_SelectedCalenderDay(CalenderButton button,int year, int month, int day)
     {
-        
         m_SelectedButtons.Enqueue(button);
 
         if(m_SelectedButtons.Count > 2)
@@ -93,6 +94,66 @@ public class CalenderManager : MonoBehaviour
             m_SelectedButtons.Peek().OnDeselect();
             m_SelectedButtons.Dequeue();
         }
+
+        UpdateDatesInBetween(m_CurrentDate, FirstDayOfWeek, year, month, day);
+
+    }
+
+    private void UpdateDatesInBetween(DateTime currentCalenderDate, DayOfWeek firstDayOfWeek, int year, int month, int day)
+    {
+        m_ClickCount++;
+
+       
+
+        if (m_ClickCount == 1 || m_ClickCount == 3)
+        {
+            startDate = new DateTime(year, month, day);
+            m_ClickCount = 1;
+        }
+
+        if (m_ClickCount == 2)
+        {
+            endDate = new DateTime(year, month, day);
+
+            // get ACTUAL the first day of the month
+            DayOfWeek actualDayOfWeek = new DateTime(currentCalenderDate.Year, currentCalenderDate.Month, 1).DayOfWeek;
+            int daysInBetween = actualDayOfWeek - firstDayOfWeek;
+            int daysbefore = daysInBetween;
+
+
+            DateTime calenderDate = new DateTime(currentCalenderDate.Year, currentCalenderDate.Month, 1);
+            calenderDate = calenderDate.AddDays(-daysbefore);
+
+
+         
+
+            for (int i = 0; i < 42; i++)
+            {
+                if(calenderDate < startDate && currentCalenderDate.Month != calenderDate.Month)
+                {
+                    CalenderButtons[i].DayIsPartOfPreviousMonth();
+                }
+                else if(calenderDate == startDate)
+                {
+                    //CalenderButtons[i].OnPointerDown(null);
+                }
+                else if(calenderDate > startDate && calenderDate < endDate)
+                {
+                    CalenderButtons[i].DayIsInBetweenSelectionDates();
+                }
+                else if(calenderDate == endDate)
+                {
+                    //CalenderButtons[i].OnPointerDown(null);
+                }
+                else
+                {
+                    CalenderButtons[i].DayIsPartOfCurrentMonth();
+                }
+
+                calenderDate = calenderDate.AddDays(1);
+            }
+        }
+
     }
 
     private void Update_CurrentDateText(Text textComponent, DateTime dateTime)

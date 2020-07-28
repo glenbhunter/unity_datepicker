@@ -49,17 +49,19 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
     private int m_Day;
     private int m_Month;
+    private int m_Year;
 
-    public void Setup(int day, int month, CalenderManager manager)
+    public void Setup(int year, int month, int day, CalenderManager manager)
     {
         m_Text.text = day.ToString();
 
         m_Day = day;
         m_Month = month;
         m_CalenderManager = manager;
+        m_Year = year;
         m_OnClick += () =>
         {
-            m_CalenderManager.OnClick_SelectedCalenderDay(this, m_Month, m_Day);
+            m_CalenderManager.OnClick_SelectedCalenderDay(this, m_Year, m_Month, m_Day);
         };
     }
 
@@ -71,6 +73,11 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
     public void DayIsPartOfPreviousMonth()
     {
         FadeImageAlpha(m_Text, 0.20f);
+    }
+
+    public void DayIsInBetweenSelectionDates()
+    {
+        m_Button.CrossFadeColor(m_HighlightColor, .1f, true, true);
     }
 
     public void DayIsToday()
