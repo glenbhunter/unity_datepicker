@@ -1,102 +1,177 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
 public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerExitHandler
 {
-    [SerializeField] Color32 m_NormalColor;
-    [SerializeField] Color32 m_HighlightColor;
-    [SerializeField] Color32 m_PressedColor;
+    private enum State
+    {
+        Normal,
+        Pressed,
+        Hover, 
+        Highlighted,
+    }
 
-    UnityAction m_OnClick;
-    CalenderManager m_CalenderManager;
-    private bool m_Selected = false;
+    [Header("Normal")]
+    [SerializeField] Color32 m_BTN_Normal_Color = Color.white;
+    [SerializeField] Color32 m_TXT_Normal_Color = new Color32(50, 50, 50, 255);
+
+    [Header("Normal but not part of current calender month")]
+    [SerializeField] Color32 m_BTN_Normal_FadedOut_Color = Color.white;
+    [SerializeField] Color32 m_TXT_Normal_FadedOut_Color = new Color32(50, 50, 50, 100);
+
+    [Header("Hover")]
+    [SerializeField] Color32 m_BTN_Hover_Color = new Color32(45, 152, 255, 150);
+    [SerializeField] Color32 m_TXT_Hover_Color = new Color32(50, 50, 50, 150);
+
+    [Header("Highlight")]
+    [SerializeField] Color32 m_BTN_Highlight_Color = new Color32(45, 152, 255, 255);
+    [SerializeField] Color32 m_TXT_Highlight_Color = new Color32(50, 50, 50, 255);
+
+    [Header("Pressed")]
+    [SerializeField] Color32 m_BTN_Pressed_Color = new Color32(45, 152, 255, 255);
+    [SerializeField] Color32 m_TXT_Pressed_Color = new Color32(50, 50, 50, 255);
+
+
+    [SerializeField] float m_FadeDuration = .1f;
+    [SerializeField] Image m_ButtonIMG;
+    [SerializeField] Text m_ButtonText;
+
+    private State m_CurrentState;
+
+    private Calender m_Calender;
+    private DateTime m_ButtonDate;
+    private bool m_DayIsInCurrentCalenderMonth;
+
+    public void Setup(DateTime btnDate, bool dayIsInCurrentCalenderMonth, Calender calender)
+    {
+        m_ButtonText.text = btnDate.Day.ToString();
+
+        m_DayIsInCurrentCalenderMonth = dayIsInCurrentCalenderMonth;
+
+        m_ButtonDate = btnDate;
+
+        if (m_DayIsInCurrentCalenderMonth)
+        {
+            FadeButton(m_BTN_Normal_Color);
+            FadeButtonText(m_TXT_Normal_Color);
+        }
+        else
+        {
+            FadeButton(m_BTN_Normal_FadedOut_Color);
+            FadeButtonText(m_TXT_Normal_FadedOut_Color);
+        }
+
+        m_Calender = calender;
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(!m_Selected)
-            m_Button.CrossFadeColor(m_HighlightColor, .1f, true, true);
+        Hover();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        m_Selected = !m_Selected;
-
-        m_Button.CrossFadeColor((m_Selected) ? m_PressedColor : m_NormalColor, .1f, true, true);
-
-        m_OnClick?.Invoke();
+        m_Calender.OnCalenderButtonClick(m_ButtonDate, this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if(!m_Selected)
-            m_Button.CrossFadeColor(m_NormalColor, .1f, true, true);
+        Clear();
     }
 
-    public void OnDeselect()
+    public void Hover()
     {
-        m_Selected = false;
-
-        m_Button.CrossFadeColor(m_NormalColor, .1f, true, true);
-    }
-
-    [Header("Button")]
-    [SerializeField] Image m_Button;
-
-    [Header("Text")]
-    [SerializeField] Text m_Text;
-
-    private int m_Day;
-    private int m_Month;
-    private int m_Year;
-
-    public void Setup(int year, int month, int day, CalenderManager manager)
-    {
-        m_Text.text = day.ToString();
-
-        m_Day = day;
-        m_Month = month;
-        m_CalenderManager = manager;
-        m_Year = year;
-        m_OnClick += () =>
+        if (m_CurrentState == State.Normal)
         {
-            m_CalenderManager.OnClick_SelectedCalenderDay(this, m_Year, m_Month, m_Day);
-        };
+            m_CurrentState = State.Hover;
+
+            FadeButton(m_BTN_Hover_Color);
+            FadeButtonText(m_TXT_Hover_Color);
+        }
     }
 
-    public void DayIsPartOfCurrentMonth()
+    public void Pressed()
     {
-        FadeImageAlpha(m_Text, 1f);
+        if(m_CurrentState != State.Normal && m_CurrentState != State.Pressed)
+        {
+            m_CurrentState = State.Pressed;
+
+            FadeButton(m_BTN_Pressed_Color);
+            FadeButtonText(m_TXT_Pressed_Color);
+        }
     }
 
-    public void DayIsPartOfPreviousMonth()
+    public void Highlight()
     {
-        FadeImageAlpha(m_Text, 0.20f);
+        if(m_CurrentState != State.Highlighted)
+        {
+            m_CurrentState = State.Highlighted;
+
+            FadeButton(m_BTN_Highlight_Color);
+            FadeButtonText(m_TXT_Highlight_Color);
+        }
     }
 
-    public void DayIsInBetweenSelectionDates()
+    public void Clear()
     {
-        m_Button.CrossFadeColor(m_HighlightColor, .1f, true, true);
+
+        if(m_CurrentState != State.Normal && m_CurrentState == State.Hover)
+        {
+            m_CurrentState = State.Normal;
+           
+            if(m_DayIsInCurrentCalenderMonth)
+            {
+                FadeButton(m_BTN_Normal_Color);
+                FadeButtonText(m_TXT_Normal_Color);
+            }
+            else
+            {
+                FadeButton(m_BTN_Normal_FadedOut_Color);
+                FadeButtonText(m_TXT_Normal_FadedOut_Color);
+            }
+        }
     }
 
-    public void DayIsToday()
+    public void ForcePressed()
     {
+        m_CurrentState = State.Pressed;
+
+        FadeButton(m_BTN_Pressed_Color);
+        FadeButtonText(m_TXT_Pressed_Color);
     }
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="image"></param>
-    /// <param name="alpha">must between 0 and 1f </param>
-    private void FadeImageAlpha(Text textComponent, float alpha)
+    public void ForceClear()
     {
-        Color32 color = textComponent.color;
-        color.a = (byte)(alpha * 255);
+        if(m_CurrentState != State.Normal && m_CurrentState == State.Pressed || m_CurrentState == State.Highlighted)
+        {
+            m_CurrentState = State.Normal;
 
-        textComponent.color = color;
+            if (m_DayIsInCurrentCalenderMonth)
+            {
+                FadeButton(m_BTN_Normal_Color);
+                FadeButtonText(m_TXT_Normal_Color);
+            }
+            else
+            {
+                FadeButton(m_BTN_Normal_FadedOut_Color);
+                FadeButtonText(m_TXT_Normal_FadedOut_Color);
+            }
+        }
     }
 
-   
-}   
+
+    public void FadeButton(Color32 targetColor)
+    {
+        m_ButtonIMG.CrossFadeColor(targetColor, m_FadeDuration, true, true);
+    }
+
+    public void FadeButtonText(Color32 targetColor)
+    {
+        m_ButtonText.CrossFadeColor(targetColor, m_FadeDuration, true, true);
+    }
+}
+

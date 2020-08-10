@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1278910283686917047}
   - component: {fileID: 1278910283686917044}
   - component: {fileID: 1278910283686917045}
-  - component: {fileID: 114408916044707796}
+  - component: {fileID: 114169884910304540}
   m_Layer: 5
   m_Name: CalenderButton
   m_TagString: Untagged
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &114408916044707796
+--- !u!114 &114169884910304540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,20 +83,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 1278910283686917032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf12218b669ae49ee8a3e7bec08b8c91, type: 3}
+  m_Script: {fileID: 11500000, guid: 6367b2a9e388249eaa7ad70209051527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NormalColor:
+  m_BTN_Normal_Color:
     serializedVersion: 2
     rgba: 4294967295
-  m_HighlightColor:
+  m_TXT_Normal_Color:
     serializedVersion: 2
-    rgba: 2683870282
-  m_PressedColor:
+    rgba: 4281479730
+  m_BTN_Normal_FadedOut_Color:
     serializedVersion: 2
-    rgba: 4294483018
-  m_Button: {fileID: 1278910283686917045}
-  m_Text: {fileID: 1278910284167340148}
+    rgba: 4294967295
+  m_TXT_Normal_FadedOut_Color:
+    serializedVersion: 2
+    rgba: 1681011250
+  m_BTN_Hover_Color:
+    serializedVersion: 2
+    rgba: 2684327981
+  m_TXT_Hover_Color:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_BTN_Highlight_Color:
+    serializedVersion: 2
+    rgba: 2533333037
+  m_TXT_Highlight_Color:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_BTN_Pressed_Color:
+    serializedVersion: 2
+    rgba: 4294940717
+  m_TXT_Pressed_Color:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_FadeDuration: 0.1
+  m_ButtonIMG: {fileID: 1278910283686917045}
+  m_ButtonText: {fileID: 1278910284167340148}
 --- !u!1 &1278910284167340150
 GameObject:
   m_ObjectHideFlags: 0
