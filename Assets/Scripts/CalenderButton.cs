@@ -54,17 +54,6 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
         m_ButtonDate = btnDate;
 
-        if (m_DayIsInCurrentCalenderMonth)
-        {
-            FadeButton(m_BTN_Normal_Color);
-            FadeButtonText(m_TXT_Normal_Color);
-        }
-        else
-        {
-            FadeButton(m_BTN_Normal_FadedOut_Color);
-            FadeButtonText(m_TXT_Normal_FadedOut_Color);
-        }
-
         m_Calender = calender;
     }
 

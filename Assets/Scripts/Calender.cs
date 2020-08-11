@@ -9,49 +9,10 @@ public class Calender : MonoBehaviour
 {
     public DayOfWeek FirstDayOfWeek;
 
-    public List<CalenderButton> CalenderButtons;
+    [SerializeField] Text m_DateHeading;
+
     public List<Text> DaysOfWeekLabels;
-
-
-    private DateTime m_CurrentCalenderDate;
-
-    private void Start()
-    {
-        m_CurrentCalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-
-        SetupCalenderGrid(m_CurrentCalenderDate);
-    }
-
-    public void SetupCalenderGrid(DateTime currentCalenderDate)
-    {
-        DateTime startDate = new DateTime(currentCalenderDate.Year, currentCalenderDate.Month, 1);
-        DayOfWeek firstDayOfMonth = startDate.DayOfWeek;
-
-        int daysBefore = firstDayOfMonth - FirstDayOfWeek;
-        startDate = startDate.AddDays(-daysBefore);
-
-        // Used for mon-sun labels
-        int startingIndex = (int)FirstDayOfWeek;
-
-        for (int i = 0; i < 42; i++)
-        {
-            // mon-sun labels
-            if(i < 7)
-            {
-                DaysOfWeekLabels[i].text = ((DayOfWeek)startingIndex).ToString().Remove(3).ToUpper();
-
-                startingIndex++;
-
-                if (startingIndex > 6)
-                    startingIndex = 0;
-            }
-
-            // calender buttons
-            CalenderButtons[i].Setup(startDate, (startDate.Month == currentCalenderDate.Month), this);
-
-            startDate = startDate.AddDays(1);
-        }
-    }
+    public List<CalenderButton> CalenderButtons;
 
     private int m_ButtonClickCount;
     private DateTime? m_First_SelectedDate;
@@ -60,6 +21,101 @@ public class Calender : MonoBehaviour
     private CalenderButton m_FirstButton;
     private CalenderButton m_SecondButton;
 
+
+    private DateTime m_CurrentCalenderDate;
+
+
+    private void Start()
+    {
+        m_CurrentCalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+
+        SetupCalenderGrid(m_CurrentCalenderDate);
+    }
+
+    public void SetupCalenderGrid(DateTime calenderDate)
+    {
+        int calenderMonth = calenderDate.Month;
+        int calenderYear = calenderDate.Year;
+
+        Update_CurrentDateHeading(calenderMonth, calenderYear);
+
+        Update_DaysOfWeekHeadings(calenderMonth, calenderYear);
+
+        Update_CalenderButtons(calenderMonth, calenderYear);
+    }
+
+    private void Update_CurrentDateHeading(int calenderMonth, int calenderYear)
+    {
+        string month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(calenderMonth);
+        m_DateHeading.text = month.ToUpper() + " " + calenderYear;
+    }
+
+    private void Update_DaysOfWeekHeadings(int calenderMonth, int calenderYear)
+    {
+        DateTime startDate = new DateTime(calenderYear, calenderMonth, 1);
+        DayOfWeek firstDayOfMonth = startDate.DayOfWeek;
+
+
+        // Used for mon-sun labels
+        int startingIndex = (int)FirstDayOfWeek;
+
+        for (int i = 0; i < 7; i++)
+        {
+            DaysOfWeekLabels[i].text = ((DayOfWeek)startingIndex).ToString().Remove(3).ToUpper();
+
+            startingIndex++;
+
+            if (startingIndex > 6)
+                startingIndex = 0;
+        }
+    }
+
+    private void Update_CalenderButtons(int calenderMonth, int calenderYear)
+    {
+        DateTime startDate = new DateTime(calenderYear, calenderMonth, 1);
+        DayOfWeek firstDayOfMonth = startDate.DayOfWeek;
+
+        int daysBefore = firstDayOfMonth - FirstDayOfWeek;
+        startDate = startDate.AddDays(-daysBefore);
+
+        for (int i = 0; i < 42; i++)
+        {
+            CalenderButtons[i].Setup(startDate, (startDate.Month == calenderMonth), this);
+
+            if(m_First_SelectedDate != null && startDate == m_First_SelectedDate)
+            {
+                m_FirstButton = CalenderButtons[i];
+                m_FirstButton.ForcePressed();
+            }
+            else if(m_SecondButton != null && startDate == m_Second_SelectedDate)
+            {
+                m_SecondButton = CalenderButtons[i];
+                m_SecondButton.ForcePressed();
+            }
+            else if (startDate > m_First_SelectedDate && startDate < m_Second_SelectedDate)
+            {
+                CalenderButtons[i].Highlight();
+            }
+            else
+            {
+                CalenderButtons[i].ForceClear();
+            }
+
+            startDate = startDate.AddDays(1);
+        }
+    }
+
+    public void OnClick_NextMonth()
+    {
+        m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(1);
+        SetupCalenderGrid(m_CurrentCalenderDate);
+    }
+
+    public void OnClick_PreviousMonth()
+    {
+        m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(-1);
+        SetupCalenderGrid(m_CurrentCalenderDate);
+    }
 
     public void OnCalenderButtonClick(DateTime chosenDate, CalenderButton button)
     {
@@ -83,14 +139,7 @@ public class Calender : MonoBehaviour
                 break;
         }
 
-        UpdateCalenderGrid(m_CurrentCalenderDate);
-
-    }
-
-    private void UpdateCalenderGrid(DateTime currentCalenderDate)
-    {
-       
-        if(m_ButtonClickCount == 1)
+        if (m_ButtonClickCount == 1)
         {
             for (int i = 0; i < 42; i++)
             {
@@ -101,9 +150,9 @@ public class Calender : MonoBehaviour
 
             return;
         }
-        else if(m_ButtonClickCount == 2)
+        else if (m_ButtonClickCount == 2)
         {
-            if(m_Second_SelectedDate < m_First_SelectedDate)
+            if (m_Second_SelectedDate < m_First_SelectedDate)
             {
                 m_FirstButton.ForceClear();
                 m_FirstButton = m_SecondButton;
@@ -114,26 +163,29 @@ public class Calender : MonoBehaviour
             }
             else
             {
-                DateTime startDate = new DateTime(currentCalenderDate.Year, currentCalenderDate.Month, 1);
+                
+                DateTime startDate = new DateTime(m_CurrentCalenderDate.Year, m_CurrentCalenderDate.Month, 1);
                 DayOfWeek firstDayOfMonth = startDate.DayOfWeek;
 
                 int daysBefore = firstDayOfMonth - FirstDayOfWeek;
                 startDate = startDate.AddDays(-daysBefore);
+                Debug.Log(startDate);
 
                 for (int i = 0; i < 42; i++)
                 {
-            
-                    if(startDate == m_First_SelectedDate)
+
+                    if (startDate == m_First_SelectedDate)
                     {
                         CalenderButtons[i].Pressed();
                     }
-                    else if(startDate == m_Second_SelectedDate)
+                    else if (startDate == m_Second_SelectedDate)
                     {
                         CalenderButtons[i].ForcePressed();
-                    
+
                     }
-                    else if(startDate > m_First_SelectedDate && startDate < m_Second_SelectedDate)
+                    else if (startDate > m_First_SelectedDate && startDate < m_Second_SelectedDate)
                     {
+                       
                         CalenderButtons[i].Highlight();
                     }
                     else
@@ -147,11 +199,6 @@ public class Calender : MonoBehaviour
                 return;
             }
         }
-    }
 
-    private void UpdateDayOfWeekLabel(Text textComponent, DateTime dateTime)
-    {
-        string month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(dateTime.Month);
-        textComponent.text = month.ToUpper() + " " + DateTime.Now.Year;
     }
 }
