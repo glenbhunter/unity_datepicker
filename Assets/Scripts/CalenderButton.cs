@@ -13,6 +13,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         Pressed,
         Hover, 
         Highlighted,
+        IsInBetween,
     }
 
     [Header("Normal")]
@@ -31,14 +32,27 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
     [SerializeField] Color32 m_BTN_Highlight_Color = new Color32(45, 152, 255, 255);
     [SerializeField] Color32 m_TXT_Highlight_Color = new Color32(50, 50, 50, 255);
 
+    [Header("InBetweenHightlight")]
+    [SerializeField] Color32 m_BTN_InBetweenColor = new Color32(45, 152, 255, 255);
+
     [Header("Pressed")]
     [SerializeField] Color32 m_BTN_Pressed_Color = new Color32(45, 152, 255, 255);
     [SerializeField] Color32 m_TXT_Pressed_Color = new Color32(50, 50, 50, 255);
 
 
     [SerializeField] float m_FadeDuration = .1f;
-    [SerializeField] Image m_ButtonIMG;
+   
     [SerializeField] Text m_ButtonText;
+
+    /// <summary>
+    /// Primary image used for calender button for example circle
+    /// </summary>
+    [SerializeField] Image m_Primary_Image;
+    [SerializeField] Image m_SecondaryImage;
+
+    [SerializeField] Sprite m_Secondary_Square_Left;
+    [SerializeField] Sprite m_Secondary_Square_Right;
+    [SerializeField] Sprite m_Secondary_Rectangle_Center;
 
     private State m_CurrentState;
 
@@ -56,6 +70,16 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
         m_Calender = calender;
     }
+
+    #region PointerClicks - Button States
+
+    #endregion
+
+    #region OverrideState - Button States
+
+    #endregion
+
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -78,8 +102,8 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         {
             m_CurrentState = State.Hover;
 
-            FadeButton(m_BTN_Hover_Color);
-            FadeButtonText(m_TXT_Hover_Color);
+            FadePrimaryButton(m_BTN_Hover_Color);
+            FadePrimaryButtonText(m_TXT_Hover_Color);
         }
     }
 
@@ -89,8 +113,8 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         {
             m_CurrentState = State.Pressed;
 
-            FadeButton(m_BTN_Pressed_Color);
-            FadeButtonText(m_TXT_Pressed_Color);
+            FadePrimaryButton(m_BTN_Pressed_Color);
+            FadePrimaryButtonText(m_TXT_Pressed_Color);
         }
     }
 
@@ -100,9 +124,19 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         {
             m_CurrentState = State.Highlighted;
 
-            FadeButton(m_BTN_Highlight_Color);
-            FadeButtonText(m_TXT_Highlight_Color);
+            FadePrimaryButton(m_BTN_Highlight_Color);
+            FadePrimaryButtonText(m_TXT_Highlight_Color);
+
         }
+    }
+
+    public void IsInBetweenFirstAndSecondSelectedDates()
+    {
+        m_CurrentState = State.IsInBetween;
+
+        FadePrimaryButton(Color.clear, 0);
+        FadeSecondaryImage(m_BTN_InBetweenColor, 0);
+        m_SecondaryImage.sprite = m_Secondary_Rectangle_Center;
     }
 
     public void Clear()
@@ -114,53 +148,85 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
            
             if(m_DayIsInCurrentCalenderMonth)
             {
-                FadeButton(m_BTN_Normal_Color);
-                FadeButtonText(m_TXT_Normal_Color);
+                FadePrimaryButton(m_BTN_Normal_Color);
+                FadePrimaryButtonText(m_TXT_Normal_Color);
             }
             else
             {
-                FadeButton(m_BTN_Normal_FadedOut_Color);
-                FadeButtonText(m_TXT_Normal_FadedOut_Color);
+                FadePrimaryButton(m_BTN_Normal_FadedOut_Color);
+                FadePrimaryButtonText(m_TXT_Normal_FadedOut_Color);
             }
         }
     }
 
-    public void ForcePressed()
+    public void ForcePressed(bool firstSelection, bool isLeft, bool isRight)
     {
-        m_CurrentState = State.Pressed;
+        if (!firstSelection)
+        {
+            if (isLeft)
+            {
+                m_SecondaryImage.sprite = m_Secondary_Square_Left;
+            }
 
-        FadeButton(m_BTN_Pressed_Color);
-        FadeButtonText(m_TXT_Pressed_Color);
+            if (isRight)
+            {
+                m_SecondaryImage.sprite = m_Secondary_Square_Right;
+            }
+
+            FadePrimaryButton(m_BTN_Pressed_Color, 0);
+            FadeSecondaryImage(m_BTN_InBetweenColor, 0);
+            FadePrimaryButtonText(m_TXT_Pressed_Color);
+        }
+
+        m_CurrentState = State.Pressed;
     }
 
     public void ForceClear()
     {
-        if(m_CurrentState != State.Normal && m_CurrentState == State.Pressed || m_CurrentState == State.Highlighted)
+        if(m_CurrentState != State.Normal && m_CurrentState == State.Pressed || m_CurrentState == State.Highlighted || m_CurrentState ==  State.IsInBetween)
         {
             m_CurrentState = State.Normal;
 
+            // Clear secondary
+            m_SecondaryImage.sprite = null;
+            FadeSecondaryImage(Color.clear, 0);
+
             if (m_DayIsInCurrentCalenderMonth)
             {
-                FadeButton(m_BTN_Normal_Color);
-                FadeButtonText(m_TXT_Normal_Color);
+                FadePrimaryButton(m_BTN_Normal_Color, 0);
+                FadePrimaryButtonText(m_TXT_Normal_Color, 0);
             }
             else
             {
-                FadeButton(m_BTN_Normal_FadedOut_Color);
-                FadeButtonText(m_TXT_Normal_FadedOut_Color);
+                FadePrimaryButton(m_BTN_Normal_FadedOut_Color, 0);
+                FadePrimaryButtonText(m_TXT_Normal_FadedOut_Color, 0);
             }
         }
     }
 
-
-    public void FadeButton(Color32 targetColor)
+    public void FadePrimaryButton(Color32 targetColor)
     {
-        m_ButtonIMG.CrossFadeColor(targetColor, m_FadeDuration, true, true);
+        m_Primary_Image.CrossFadeColor(targetColor, m_FadeDuration, true, true);
     }
 
-    public void FadeButtonText(Color32 targetColor)
+    public void FadePrimaryButton(Color32 targetColor, float fadeDuration)
+    {
+        m_Primary_Image.CrossFadeColor(targetColor, fadeDuration, true, true);
+    }
+
+    public void FadePrimaryButtonText(Color32 targetColor)
     {
         m_ButtonText.CrossFadeColor(targetColor, m_FadeDuration, true, true);
+    }
+
+    public void FadePrimaryButtonText(Color32 targetColor, float fadeDuration)
+    {
+        m_ButtonText.CrossFadeColor(targetColor, fadeDuration, true, true);
+    }
+
+    public void FadeSecondaryImage(Color32 targetColor, float fadeDuration)
+    {
+        m_SecondaryImage.CrossFadeColor(targetColor, fadeDuration, true, true);
     }
 }
 

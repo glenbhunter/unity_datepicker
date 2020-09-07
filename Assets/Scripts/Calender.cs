@@ -85,12 +85,12 @@ public class Calender : MonoBehaviour
             if(m_First_SelectedDate != null && startDate == m_First_SelectedDate)
             {
                 m_FirstButton = CalenderButtons[i];
-                m_FirstButton.ForcePressed();
+                m_FirstButton.ForcePressed((m_ButtonClickCount == 1) ? true : false, true, false);
             }
             else if(m_SecondButton != null && startDate == m_Second_SelectedDate)
             {
                 m_SecondButton = CalenderButtons[i];
-                m_SecondButton.ForcePressed();
+                m_SecondButton.ForcePressed((m_ButtonClickCount == 2) ? true : false, false, true);
             }
             else if (startDate > m_First_SelectedDate && startDate < m_Second_SelectedDate)
             {
@@ -141,17 +141,25 @@ public class Calender : MonoBehaviour
 
         if (m_ButtonClickCount == 1)
         {
+            Debug.Log("Button click 1");
             for (int i = 0; i < 42; i++)
             {
-                CalenderButtons[i].ForceClear();
+                if(CalenderButtons[i] != m_FirstButton)
+                {
+                    CalenderButtons[i].ForceClear();
+                }
+                else
+                {
+                    m_FirstButton.ForcePressed(true, false, false);
+                }
             }
 
-            m_FirstButton.ForcePressed();
 
             return;
         }
         else if (m_ButtonClickCount == 2)
         {
+            Debug.Log("Button click 2");
             if (m_Second_SelectedDate < m_First_SelectedDate)
             {
                 m_FirstButton.ForceClear();
@@ -176,17 +184,16 @@ public class Calender : MonoBehaviour
 
                     if (startDate == m_First_SelectedDate)
                     {
-                        CalenderButtons[i].Pressed();
+                        CalenderButtons[i].ForcePressed(false, false, true);
                     }
                     else if (startDate == m_Second_SelectedDate)
                     {
-                        CalenderButtons[i].ForcePressed();
-
+                        CalenderButtons[i].ForcePressed(false, true, false);
+                            
                     }
                     else if (startDate > m_First_SelectedDate && startDate < m_Second_SelectedDate)
                     {
-                       
-                        CalenderButtons[i].Highlight();
+                        CalenderButtons[i].IsInBetweenFirstAndSecondSelectedDates();
                     }
                     else
                     {
