@@ -9,6 +9,7 @@ namespace GlenHunter
     {
         private enum State
         {
+            NULL,
             Normal,
             Pressed,
             Hover,
@@ -34,6 +35,7 @@ namespace GlenHunter
 
         [Header("InBetweenHightlight")]
         [SerializeField] Color32 m_BTN_InBetweenColor = new Color32(45, 152, 255, 255);
+        [SerializeField] Color32 m_TXT_InBetweenColor = Color.white;
 
         [Header("Pressed")]
         [SerializeField] Color32 m_BTN_Pressed_Color = new Color32(45, 152, 255, 255);
@@ -88,7 +90,7 @@ namespace GlenHunter
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            m_Calender.OnCalenderButtonClick(m_ButtonDate, this);
+            m_Calender.OnCalenderButtonClick(m_ButtonDate);
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -136,7 +138,7 @@ namespace GlenHunter
             m_SecondaryImage.sprite = m_Secondary_Rectangle_Center;
             FadePrimaryButton(Color.clear, 0);
             FadeSecondaryImage(m_BTN_InBetweenColor, 0);
-            
+            FadePrimaryButtonText(m_TXT_InBetweenColor, 0);
         }
 
         public void Clear()
@@ -184,7 +186,7 @@ namespace GlenHunter
 
         public void ForceClear()
         {
-            if (m_CurrentState != State.Normal && m_CurrentState == State.Pressed || m_CurrentState == State.Highlighted || m_CurrentState == State.IsInBetween)
+            if (m_CurrentState != State.Normal && m_CurrentState == State.Pressed || m_CurrentState == State.Highlighted || m_CurrentState == State.IsInBetween || m_CurrentState == State.NULL)
             {
                 m_CurrentState = State.Normal;
 

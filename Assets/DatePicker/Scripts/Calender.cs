@@ -16,13 +16,8 @@ namespace GlenHunter
         public List<Text> DaysOfWeekLabels;
         public List<CalenderButton> CalenderButtons;
 
-        private int m_ButtonClickCount;
         private DateTime? m_StartDate;
         private DateTime? m_EndDate;
-
-        private CalenderButton m_StartDateBTN;
-        private CalenderButton m_EndDateBTN;
-
 
         private DateTime m_CurrentCalenderDate;
 
@@ -84,22 +79,7 @@ namespace GlenHunter
             {
                 CalenderButtons[i].Setup(startDate, (startDate.Month == calenderMonth), this);
 
-                if (m_StartDate != null && startDate == m_StartDate)
-                {
-                    m_StartDateBTN = CalenderButtons[i];
-                }
-                else if (m_EndDateBTN != null && startDate == m_EndDate)
-                {
-                    m_EndDateBTN = CalenderButtons[i];
-                }
-                else if (startDate > m_StartDate && startDate < m_EndDate)
-                {
-                    CalenderButtons[i].Highlight();
-                }
-                else
-                {
-                    CalenderButtons[i].ForceClear();
-                }
+                CalenderButtons[i].ForceClear();
 
                 startDate = startDate.AddDays(1);
             }
@@ -108,13 +88,17 @@ namespace GlenHunter
         public void OnClick_NextMonth()
         {
             m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(1);
-            SetupCalenderGrid(m_CurrentCalenderDate);
+            Update_CurrentDateHeading(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
+            Update_DaysOfWeekHeadings(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
+            Refresh();
         }
 
         public void OnClick_PreviousMonth()
         {
             m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(-1);
-            SetupCalenderGrid(m_CurrentCalenderDate);
+            Update_CurrentDateHeading(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
+            Update_DaysOfWeekHeadings(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
+            Refresh();
         }
 
         private void Refresh()
@@ -124,29 +108,28 @@ namespace GlenHunter
 
             int daysBefore = firstDayOfMonth - FirstDayOfWeek;
             currentDate = currentDate.AddDays(-daysBefore);
-            //Debug.Log(startDate);
 
             for (int i = 0; i < 42; i++)
             {
                 // one click registered
-                if(m_StartDate != null && currentDate == m_StartDate && m_EndDate == null)
+                if (m_StartDate != null && currentDate == m_StartDate && m_EndDate == null)
                 {
                     CalenderButtons[i].ForcePressed(true, false);
-                   
+
                 }
-            // two clicks have registered
+                // two clicks have registered
                 // is start date    
-                else if(m_StartDate != null && currentDate == m_StartDate)
+                else if (m_StartDate != null && currentDate == m_StartDate)
                 {
                     CalenderButtons[i].ForcePressed(false, true);
                 }
                 // is end date
-                else if(m_EndDate != null && currentDate == m_EndDate)
+                else if (m_EndDate != null && currentDate == m_EndDate)
                 {
                     CalenderButtons[i].ForcePressed(false, false);
                 }
                 // is inbetween
-                else if(currentDate > m_StartDate && currentDate < m_EndDate)
+                else if (currentDate > m_StartDate && currentDate < m_EndDate)
                 {
                     CalenderButtons[i].IsInBetweenFirstAndSecondSelectedDates();
                 }
@@ -160,36 +143,31 @@ namespace GlenHunter
         }
 
 
-        public void OnCalenderButtonClick(DateTime chosenDate, CalenderButton button)
+        public void OnCalenderButtonClick(DateTime chosenDate)
         {
-            if(m_EndDate != null)
+            if (m_EndDate != null)
             {
                 m_StartDate = null;
                 m_EndDate = null;
             }
 
             // assume it's first click
-            if(m_StartDate == null)
+            if (m_StartDate == null)
             {
                 m_StartDate = chosenDate;
-                m_StartDateBTN = button;
                 Refresh();
                 return;
             }
-            else if(chosenDate < m_StartDate)
+            else if (chosenDate < m_StartDate)
             {
                 m_StartDate = chosenDate;
-                m_StartDateBTN = button;
                 Refresh();
                 return;
             }
 
             // if we get here we can assume the user is selecting the last date
             m_EndDate = chosenDate;
-            m_EndDateBTN = button;
             Refresh();
-               
-            }
         }
     }
 }
