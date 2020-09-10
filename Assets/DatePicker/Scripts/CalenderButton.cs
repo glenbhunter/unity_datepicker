@@ -138,7 +138,7 @@ namespace GlenHunter
             m_SecondaryImage.sprite = m_Secondary_Rectangle_Center;
             FadePrimaryButton(Color.clear, 0);
             FadeSecondaryImage(m_BTN_InBetweenColor, 0);
-            FadePrimaryButtonText(m_TXT_InBetweenColor, 0);
+            //FadePrimaryButtonText(m_TXT_InBetweenColor, 0);
         }
 
         public void Clear()

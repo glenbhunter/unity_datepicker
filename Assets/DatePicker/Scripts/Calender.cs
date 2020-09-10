@@ -90,6 +90,7 @@ namespace GlenHunter
             m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(1);
             Update_CurrentDateHeading(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
             Update_DaysOfWeekHeadings(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
+            Update_CalenderButtons(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
             Refresh();
         }
 
@@ -98,6 +99,7 @@ namespace GlenHunter
             m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(-1);
             Update_CurrentDateHeading(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
             Update_DaysOfWeekHeadings(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
+            Update_CalenderButtons(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
             Refresh();
         }
 
@@ -142,7 +144,6 @@ namespace GlenHunter
             }
         }
 
-
         public void OnCalenderButtonClick(DateTime chosenDate)
         {
             if (m_EndDate != null)
@@ -151,8 +152,8 @@ namespace GlenHunter
                 m_EndDate = null;
             }
 
-            // assume it's first click
-            if (m_StartDate == null)
+            // assume it's first click, or the same selection
+            if (m_StartDate == null || m_StartDate != null && chosenDate == m_StartDate) 
             {
                 m_StartDate = chosenDate;
                 Refresh();

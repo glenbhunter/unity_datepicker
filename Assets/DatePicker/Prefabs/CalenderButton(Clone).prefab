@@ -218,28 +218,28 @@ MonoBehaviour:
     rgba: 1681011250
   m_BTN_Hover_Color:
     serializedVersion: 2
-    rgba: 4293493840
+    rgba: 4287221021
   m_TXT_Hover_Color:
     serializedVersion: 2
     rgba: 4294967295
   m_BTN_Highlight_Color:
     serializedVersion: 2
-    rgba: 2531886160
+    rgba: 2525613341
   m_TXT_Highlight_Color:
     serializedVersion: 2
     rgba: 4281479730
   m_BTN_InBetweenColor:
     serializedVersion: 2
-    rgba: 2414445648
+    rgba: 1468648733
   m_TXT_InBetweenColor:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281479730
   m_BTN_Pressed_Color:
     serializedVersion: 2
-    rgba: 4293493840
+    rgba: 4287221021
   m_TXT_Pressed_Color:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4294967295
   m_FadeDuration: 0.1
   m_ButtonText: {fileID: 3965394324698099415}
   m_Primary_Image: {fileID: 9112606524210455842}
