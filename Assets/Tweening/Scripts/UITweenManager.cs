@@ -15,6 +15,7 @@ namespace GlenHunter
 
         private void Awake()
         {
+
             if (Instance != null && Instance != this)
             {
                 Destroy(this.gameObject);
@@ -22,6 +23,7 @@ namespace GlenHunter
             }
 
             Instance = this;
+
             DontDestroyOnLoad(this);
         }
        

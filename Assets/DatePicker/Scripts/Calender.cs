@@ -1,174 +1,121 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
+﻿
+using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
-namespace GlenHunter
+public class Calender : MonoBehaviour
 {
-    public class Calender : MonoBehaviour
+    [SerializeField] private DayOfWeek m_FirstDayOfWeek;
+
+    public List<CalenderButton> CalenderButtons;
+
+    public DateTime CalenderDate;
+
+    private DateTime? m_StartDate;
+    private int m_StartDate_SelectedBtnIndex;
+
+    private DateTime? m_EndDate;
+    private int m_EndDate_SelectedBtnIndex;
+
+    private void Start()
     {
-        public DayOfWeek FirstDayOfWeek;
+        CalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-        [SerializeField] Text m_DateHeading;
+        Refresh(true);
+    }
 
-        public List<Text> DaysOfWeekLabels;
-        public List<CalenderButton> CalenderButtons;
-
-        private DateTime? m_StartDate;
-        private DateTime? m_EndDate;
-
-        private DateTime m_CurrentCalenderDate;
-
-
-        private void Start()
+    public void OnPointerEnter(int buttonIndex)
+    {
+        if(CalenderButtons[buttonIndex].CurrentState == CalenderButton.State.Normal && m_EndDate == null)
         {
-            m_CurrentCalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-
-            SetupCalenderGrid(m_CurrentCalenderDate);
+            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Hover, CalenderDate, m_StartDate, m_EndDate);
         }
+    }
 
-        public void SetupCalenderGrid(DateTime calenderDate)
+    public void OnPointerDown(int buttonIndex, DateTime chosenDate)
+    {
+        if(m_StartDate != null && m_EndDate != null)
         {
-            int calenderMonth = calenderDate.Month;
-            int calenderYear = calenderDate.Year;
-
-            Update_CurrentDateHeading(calenderMonth, calenderYear);
-
-            Update_DaysOfWeekHeadings(calenderMonth, calenderYear);
-
-            Update_CalenderButtons(calenderMonth, calenderYear);
-        }
-
-        private void Update_CurrentDateHeading(int calenderMonth, int calenderYear)
-        {
-            string month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(calenderMonth);
-            m_DateHeading.text = month.ToUpper() + " " + calenderYear;
-        }
-
-        private void Update_DaysOfWeekHeadings(int calenderMonth, int calenderYear)
-        {
-            DateTime startDate = new DateTime(calenderYear, calenderMonth, 1);
-            DayOfWeek firstDayOfMonth = startDate.DayOfWeek;
-
-
-            // Used for mon-sun labels
-            int startingIndex = (int)FirstDayOfWeek;
-
-            for (int i = 0; i < 7; i++)
+            // unhighlight
+            for (int i = m_StartDate_SelectedBtnIndex; i < m_EndDate_SelectedBtnIndex + 1; i++)
             {
-                DaysOfWeekLabels[i].text = ((DayOfWeek)startingIndex).ToString().Remove(3).ToUpper();
-
-                startingIndex++;
-
-                if (startingIndex > 6)
-                    startingIndex = 0;
-            }
-        }
-
-        private void Update_CalenderButtons(int calenderMonth, int calenderYear)
-        {
-            DateTime startDate = new DateTime(calenderYear, calenderMonth, 1);
-            DayOfWeek firstDayOfMonth = startDate.DayOfWeek;
-
-            int daysBefore = firstDayOfMonth - FirstDayOfWeek;
-            startDate = startDate.AddDays(-daysBefore);
-
-            for (int i = 0; i < 42; i++)
-            {
-                CalenderButtons[i].Setup(startDate, (startDate.Month == calenderMonth), this);
-
-                CalenderButtons[i].ForceClear();
-
-                startDate = startDate.AddDays(1);
-            }
-        }
-
-        public void OnClick_NextMonth()
-        {
-            m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(1);
-            Update_CurrentDateHeading(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
-            Update_DaysOfWeekHeadings(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
-            Update_CalenderButtons(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
-            Refresh();
-        }
-
-        public void OnClick_PreviousMonth()
-        {
-            m_CurrentCalenderDate = m_CurrentCalenderDate.AddMonths(-1);
-            Update_CurrentDateHeading(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
-            Update_DaysOfWeekHeadings(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
-            Update_CalenderButtons(m_CurrentCalenderDate.Month, m_CurrentCalenderDate.Year);
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            DateTime currentDate = new DateTime(m_CurrentCalenderDate.Year, m_CurrentCalenderDate.Month, 1);
-            DayOfWeek firstDayOfMonth = currentDate.DayOfWeek;
-
-            int daysBefore = firstDayOfMonth - FirstDayOfWeek;
-            currentDate = currentDate.AddDays(-daysBefore);
-
-            for (int i = 0; i < 42; i++)
-            {
-                // one click registered
-                if (m_StartDate != null && currentDate == m_StartDate && m_EndDate == null)
-                {
-                    CalenderButtons[i].ForcePressed(true, false);
-
-                }
-                // two clicks have registered
-                // is start date    
-                else if (m_StartDate != null && currentDate == m_StartDate)
-                {
-                    CalenderButtons[i].ForcePressed(false, true);
-                }
-                // is end date
-                else if (m_EndDate != null && currentDate == m_EndDate)
-                {
-                    CalenderButtons[i].ForcePressed(false, false);
-                }
-                // is inbetween
-                else if (currentDate > m_StartDate && currentDate < m_EndDate)
-                {
-                    CalenderButtons[i].IsInBetweenFirstAndSecondSelectedDates();
-                }
-                else
-                {
-                    CalenderButtons[i].ForceClear();
-                }
-
-                currentDate = currentDate.AddDays(1);
-            }
-        }
-
-        public void OnCalenderButtonClick(DateTime chosenDate)
-        {
-            if (m_EndDate != null)
-            {
-                m_StartDate = null;
-                m_EndDate = null;
+                CalenderButtons[i].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
             }
 
-            // assume it's first click, or the same selection
-            if (m_StartDate == null || m_StartDate != null && chosenDate == m_StartDate) 
-            {
-                m_StartDate = chosenDate;
-                Refresh();
-                return;
-            }
-            else if (chosenDate < m_StartDate)
-            {
-                m_StartDate = chosenDate;
-                Refresh();
-                return;
-            }
+            m_StartDate = null;
+            m_EndDate = null;
 
-            // if we get here we can assume the user is selecting the last date
+            // don't return on this one
+        }
+
+        if(m_StartDate == null && m_EndDate == null)
+        {
+            m_StartDate = chosenDate;
+            m_StartDate_SelectedBtnIndex = buttonIndex;
+
+            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+
+            return;
+        }
+
+        if(m_StartDate != null && chosenDate < m_StartDate && m_EndDate == null)
+        {
+            // revert previous select btn and select new btn
+            CalenderButtons[m_StartDate_SelectedBtnIndex].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
+
+            m_StartDate = chosenDate;
+            m_StartDate_SelectedBtnIndex = buttonIndex;
+
+            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+
+            return;
+        }
+
+        if(m_StartDate != null && m_EndDate == null)
+        {
             m_EndDate = chosenDate;
-            Refresh();
+            m_EndDate_SelectedBtnIndex = buttonIndex;
+
+            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+
+            // hightlight
+            for (int i = m_StartDate_SelectedBtnIndex; i < m_EndDate_SelectedBtnIndex + 1; i++)
+            {
+                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, CalenderDate, m_StartDate, m_EndDate);
+            }
+            
+            return;
+        }
+    }
+
+    public void OnPointerExit(int buttonIndex)
+    {
+        if(CalenderButtons[buttonIndex].CurrentState == CalenderButton.State.Hover)
+        {
+            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
+        }
+    }
+
+    public void Refresh(bool setup)
+    {
+        DateTime currentDate = new DateTime(CalenderDate.Year, DateTime.Now.Month, 1);
+
+        DayOfWeek firstDayOfMonth = currentDate.DayOfWeek;
+
+        // start current date based upon start day of week
+        currentDate = currentDate.AddDays(-(firstDayOfMonth - m_FirstDayOfWeek));
+
+        for (int i = 0; i < 42; i++)
+        {
+            // Setup
+            int btnIndex = i;
+
+            if(setup)
+            {
+                CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString());
+            }
+
+            currentDate = currentDate.AddDays(1);
         }
     }
 }
