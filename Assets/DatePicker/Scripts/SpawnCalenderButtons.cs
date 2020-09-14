@@ -53,6 +53,6 @@ public class SpawnCalenderButtons : MonoBehaviour
         }
 
         m_Calender.CalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-        m_Calender.Refresh(true);
+        m_Calender.Setup();
     }
 }

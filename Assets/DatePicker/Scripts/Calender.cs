@@ -2,10 +2,15 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using System.Globalization;
 
 public class Calender : MonoBehaviour
 {
     [SerializeField] private DayOfWeek m_FirstDayOfWeek;
+
+    [SerializeField] Text m_DateLabel;
+    [SerializeField] List<Text> m_DaysOfWeekLabels;
 
     public List<CalenderButton> CalenderButtons;
 
@@ -17,11 +22,13 @@ public class Calender : MonoBehaviour
     private DateTime? m_EndDate;
     private int m_EndDate_SelectedBtnIndex;
 
+   
+
     private void Start()
     {
         CalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-        Refresh(true);
+        Setup();
     }
 
     public void OnPointerEnter(int buttonIndex)
@@ -36,8 +43,7 @@ public class Calender : MonoBehaviour
     {
         if(m_StartDate != null && m_EndDate != null)
         {
-            // unhighlight
-            for (int i = m_StartDate_SelectedBtnIndex; i < m_EndDate_SelectedBtnIndex + 1; i++)
+            for (int i = 0; i < 42; i++)
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
             }
@@ -96,26 +102,104 @@ public class Calender : MonoBehaviour
         }
     }
 
-    public void Refresh(bool setup)
+    public void Setup()
     {
-        DateTime currentDate = new DateTime(CalenderDate.Year, DateTime.Now.Month, 1);
+        DateTime currentDate = new DateTime(CalenderDate.Year, CalenderDate.Month, 1);
 
         DayOfWeek firstDayOfMonth = currentDate.DayOfWeek;
 
-        // start current date based upon start day of week
-        currentDate = currentDate.AddDays(-(firstDayOfMonth - m_FirstDayOfWeek));
+
+        if(firstDayOfMonth < m_FirstDayOfWeek)
+        {
+           
+            // start current date based upon start day of week
+
+            int dayIndex = (int)m_FirstDayOfWeek;
+            int daysBehind = 0;
+
+            for (int i = 0; i < 6; i++)
+            {
+                dayIndex++;
+                daysBehind++;
+
+                if (dayIndex > 6)
+                {
+                    dayIndex = 0;
+                }
+
+                if(dayIndex == (int)firstDayOfMonth)
+                {
+                    Debug.Log("is ture");
+                    currentDate = currentDate.AddDays(-daysBehind);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // start current date based upon start day of week
+            currentDate = currentDate.AddDays(-(firstDayOfMonth - m_FirstDayOfWeek));
+        }
+        
+
+        // update main date heading
+        string month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(CalenderDate.Month);
+        m_DateLabel.text = month.ToUpper() + " " + CalenderDate.Year;
+
+        //used for mon-sun labels
+        int startingIndex = (int)m_FirstDayOfWeek;
 
         for (int i = 0; i < 42; i++)
         {
-            // Setup
-            int btnIndex = i;
 
-            if(setup)
+            // update days of weeks labels
+            if(i < 7)
             {
-                CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString());
+                m_DaysOfWeekLabels[i].text = ((DayOfWeek)startingIndex).ToString().Remove(3).ToUpper();
+
+                startingIndex++;
+
+                if (startingIndex > 6)
+                    startingIndex = 0;
+            }
+
+            // update buttons
+            int btnIndex = i;
+            CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString());
+
+            // highlight
+            if(m_StartDate != null && m_StartDate == currentDate)
+            {
+                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+                m_StartDate_SelectedBtnIndex = i;
+            }
+            else if(m_EndDate != null && m_EndDate == currentDate)
+            {
+                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+                m_EndDate_SelectedBtnIndex = i;
+            }
+
+            if(m_StartDate != null && m_EndDate != null && currentDate >= m_StartDate && currentDate <= m_EndDate)
+            {
+                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, CalenderDate, m_StartDate, m_EndDate);
             }
 
             currentDate = currentDate.AddDays(1);
         }
+    }
+
+    /// <summary>
+    /// Change to next calender month
+    /// </summary>
+    public void OnClick_NextCalenderMonth()
+    {
+        CalenderDate = CalenderDate.AddMonths(1);
+        Setup();
+    }
+
+    public void OnClick_PreviousCalenderMonth()
+    {
+        CalenderDate = CalenderDate.AddMonths(-1);
+        Setup();
     }
 }

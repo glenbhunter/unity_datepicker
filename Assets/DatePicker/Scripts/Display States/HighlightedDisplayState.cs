@@ -18,7 +18,6 @@ public class HighlightedDisplayState : DisplayState
     {
         if(buttonDate == selectedStartDate)
         {
-            Debug.Log("frist");
             m_Highlight_Image.sprite = m_FirstSelectionDate_HighlightSprite;
         }
         else if(buttonDate > selectedStartDate && buttonDate < selectedEndDate)
@@ -28,7 +27,6 @@ public class HighlightedDisplayState : DisplayState
         }
         else if(buttonDate == selectedEndDate)
         {
-            Debug.Log("last");
             m_Highlight_Image.sprite = m_LastSelectionDate_HighlightSprite;
         }
 
