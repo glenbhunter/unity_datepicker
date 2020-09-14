@@ -155,7 +155,7 @@ public class Calender : MonoBehaviour
             // update days of weeks labels
             if(i < 7)
             {
-                m_DaysOfWeekLabels[i].text = ((DayOfWeek)startingIndex).ToString().Remove(3).ToUpper();
+                m_DaysOfWeekLabels[i].text = ((DayOfWeek)startingIndex).ToString().Remove(1).ToUpper();
 
                 startingIndex++;
 
