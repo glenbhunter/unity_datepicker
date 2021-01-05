@@ -22,7 +22,8 @@ public class Calender : MonoBehaviour
     private DateTime? m_EndDate;
     private int m_EndDate_SelectedBtnIndex;
 
-   
+    public delegate void CalenderUpdate(DateTime? startDate, DateTime? endDate);
+    public CalenderUpdate CalenderUpdated;
 
     private void Start()
     {
@@ -61,6 +62,8 @@ public class Calender : MonoBehaviour
 
             CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
 
+            CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
+
             return;
         }
 
@@ -73,6 +76,8 @@ public class Calender : MonoBehaviour
             m_StartDate_SelectedBtnIndex = buttonIndex;
 
             CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+
+            CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
 
             return;
         }
@@ -89,10 +94,13 @@ public class Calender : MonoBehaviour
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, CalenderDate, m_StartDate, m_EndDate);
             }
-            
+
+            CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
+
             return;
         }
     }
+
 
     public void OnPointerExit(int buttonIndex)
     {
@@ -104,6 +112,7 @@ public class Calender : MonoBehaviour
 
     public void Setup()
     {
+        // create current month starting from 1
         DateTime currentDate = new DateTime(CalenderDate.Year, CalenderDate.Month, 1);
 
         DayOfWeek firstDayOfMonth = currentDate.DayOfWeek;
@@ -113,7 +122,7 @@ public class Calender : MonoBehaviour
         {
            
             // start current date based upon start day of week
-
+            // this is used to show previous dates before
             int dayIndex = (int)m_FirstDayOfWeek;
             int daysBehind = 0;
 
@@ -172,6 +181,7 @@ public class Calender : MonoBehaviour
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
                 m_StartDate_SelectedBtnIndex = i;
+                Debug.Log("Select button");
             }
             else if(m_EndDate != null && m_EndDate == currentDate)
             {
