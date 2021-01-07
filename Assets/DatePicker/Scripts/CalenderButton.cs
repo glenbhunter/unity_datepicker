@@ -13,6 +13,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         Hover,
         Selected,
         Highlighted,
+        Disabled,
     }
 
     [SerializeField] Text m_Text;
@@ -22,6 +23,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
     [SerializeField] DisplayState m_SelectedState;
     [SerializeField] DisplayState m_HoverState;
     [SerializeField] DisplayState m_HighlightedState;
+    [SerializeField] DisplayState m_DisabledState;
 
     public State CurrentState { get; private set; }
 
@@ -29,20 +31,38 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
     private Calender m_Calender;
     private DateTime m_ButtonDate;
 
-    public void Setup(int buttonIndex, Calender calender, DateTime buttonDate, string text)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="buttonIndex"></param>
+    /// <param name="calender"></param>
+    /// <param name="buttonDate"></param>
+    /// <param name="text"></param>
+    /// <param name="disable">decided whether or not to disable button, generally used if the calender date does not want to be shown</param>
+    public void Setup(int buttonIndex, Calender calender, DateTime buttonDate, string text, bool disable)
     {
+
+        m_DisplayDictionary = new Dictionary<State, DisplayState>();
         m_ButtonIndex = buttonIndex;
         m_Calender = calender;
         m_ButtonDate = buttonDate;
-
         m_Text.text = text;
 
-        m_DisplayDictionary = new Dictionary<State, DisplayState>();
+        if (disable)
+        {
+            m_DisplayDictionary.Add(State.Disabled, m_DisabledState);
+            UpdateState(State.Disabled, m_Calender.CalenderDate, null, null);
+            return;
+        }
+
         m_DisplayDictionary.Add(State.Normal, m_NormalState);
         m_DisplayDictionary.Add(State.Hover, m_HoverState);
         m_DisplayDictionary.Add(State.Selected, m_SelectedState);
         m_DisplayDictionary.Add(State.Highlighted, m_HighlightedState);
 
+
+   
+       
         // Force normal display script to trigger
         UpdateState(State.Normal, m_Calender.CalenderDate, null, null);
     }
@@ -50,17 +70,20 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        m_Calender.OnPointerEnter(m_ButtonIndex);
+        if (CurrentState != State.Disabled)
+            m_Calender.OnPointerEnter(m_ButtonIndex);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        m_Calender.OnPointerDown(m_ButtonIndex, m_ButtonDate);
+        if(CurrentState != State.Disabled)
+            m_Calender.OnPointerDown(m_ButtonIndex, m_ButtonDate);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        m_Calender.OnPointerExit(m_ButtonIndex);
+        if (CurrentState != State.Disabled)
+            m_Calender.OnPointerExit(m_ButtonIndex);
     }
 
     public void UpdateState(State newState, DateTime? calenderDate, DateTime? selectedStartDate, DateTime? selectedEndDate)

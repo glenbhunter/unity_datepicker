@@ -11,6 +11,7 @@ public class Calender : MonoBehaviour
 
     [SerializeField] Text m_DateLabel;
     [SerializeField] List<Text> m_DaysOfWeekLabels;
+    [SerializeField] bool m_ShowDatesInOtherMonths = true;
 
     public List<CalenderButton> CalenderButtons;
 
@@ -46,7 +47,8 @@ public class Calender : MonoBehaviour
         {
             for (int i = 0; i < 42; i++)
             {
-                CalenderButtons[i].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
+                if(CalenderButtons[i].CurrentState != CalenderButton.State.Disabled)
+                    CalenderButtons[i].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
             }
 
             m_StartDate = null;
@@ -60,7 +62,8 @@ public class Calender : MonoBehaviour
             m_StartDate = chosenDate;
             m_StartDate_SelectedBtnIndex = buttonIndex;
 
-            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+            if (CalenderButtons[buttonIndex].CurrentState != CalenderButton.State.Disabled)
+                CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
 
             CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
 
@@ -75,7 +78,8 @@ public class Calender : MonoBehaviour
             m_StartDate = chosenDate;
             m_StartDate_SelectedBtnIndex = buttonIndex;
 
-            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
+            if (CalenderButtons[buttonIndex].CurrentState != CalenderButton.State.Disabled)
+                CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
 
             CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
 
@@ -92,7 +96,8 @@ public class Calender : MonoBehaviour
             // hightlight
             for (int i = m_StartDate_SelectedBtnIndex; i < m_EndDate_SelectedBtnIndex + 1; i++)
             {
-                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, CalenderDate, m_StartDate, m_EndDate);
+                if (CalenderButtons[i].CurrentState != CalenderButton.State.Disabled)
+                    CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, CalenderDate, m_StartDate, m_EndDate);
             }
 
             CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
@@ -106,7 +111,8 @@ public class Calender : MonoBehaviour
     {
         if(CalenderButtons[buttonIndex].CurrentState == CalenderButton.State.Hover)
         {
-            CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
+            if (CalenderButtons[buttonIndex].CurrentState != CalenderButton.State.Disabled)
+                CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
         }
     }
 
@@ -138,7 +144,6 @@ public class Calender : MonoBehaviour
 
                 if(dayIndex == (int)firstDayOfMonth)
                 {
-                    Debug.Log("is ture");
                     currentDate = currentDate.AddDays(-daysBehind);
                     break;
                 }
@@ -174,14 +179,13 @@ public class Calender : MonoBehaviour
 
             // update buttons
             int btnIndex = i;
-            CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString());
+            CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString(), (m_ShowDatesInOtherMonths) ? false : (currentDate.Month == CalenderDate.Month) ? false : true);
 
             // highlight
             if(m_StartDate != null && m_StartDate == currentDate)
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
                 m_StartDate_SelectedBtnIndex = i;
-                Debug.Log("Select button");
             }
             else if(m_EndDate != null && m_EndDate == currentDate)
             {
@@ -212,4 +216,17 @@ public class Calender : MonoBehaviour
         CalenderDate = CalenderDate.AddMonths(-1);
         Setup();
     }
+
+    public void OnClick_NextCalenderYear()
+    {
+        CalenderDate = CalenderDate.AddYears(1);
+        Setup();
+    }
+
+    public void OnClick_PreviousCalenderYear()
+    {
+        CalenderDate = CalenderDate.AddYears(-1);
+        Setup();
+    }
 }
+
