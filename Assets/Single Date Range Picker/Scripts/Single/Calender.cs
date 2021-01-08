@@ -7,11 +7,14 @@ using System.Globalization;
 
 public class Calender : MonoBehaviour
 {
+    [Header("Options")]
     [SerializeField] private DayOfWeek m_FirstDayOfWeek;
+    [SerializeField] bool m_ShowDatesInOtherMonths = true;
 
+    [Header("References")]
     [SerializeField] Text m_DateLabel;
     [SerializeField] List<Text> m_DaysOfWeekLabels;
-    [SerializeField] bool m_ShowDatesInOtherMonths = true;
+    
 
     public List<CalenderButton> CalenderButtons;
 

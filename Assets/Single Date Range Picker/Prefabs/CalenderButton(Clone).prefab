@@ -256,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BtnImageColor:
     serializedVersion: 2
-    rgba: 4287221021
+    rgba: 4287389472
   m_BtnTextColor:
     serializedVersion: 2
     rgba: 4294967295
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BtnImageColor:
     serializedVersion: 2
-    rgba: 4287221021
+    rgba: 4287389472
   m_BtnTextColor:
     serializedVersion: 2
     rgba: 4294967295
@@ -304,7 +304,7 @@ MonoBehaviour:
     type: 3}
   m_Highlight_Image_Color:
     serializedVersion: 2
-    rgba: 847891741
+    rgba: 848060192
 --- !u!114 &114319046893274842
 MonoBehaviour:
   m_ObjectHideFlags: 0
