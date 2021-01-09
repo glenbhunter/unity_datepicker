@@ -51,7 +51,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         if (disable)
         {
             m_DisplayDictionary.Add(State.Disabled, m_DisabledState);
-            UpdateState(State.Disabled, m_Calender.CalenderDate, null, null);
+            UpdateState(State.Disabled, m_Calender.Date, null, null);
             return;
         }
 
@@ -64,26 +64,26 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
    
        
         // Force normal display script to trigger
-        UpdateState(State.Normal, m_Calender.CalenderDate, null, null);
+        UpdateState(State.Normal, m_Calender.Date, null, null);
     }
 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (CurrentState != State.Disabled)
-            m_Calender.OnPointerEnter(m_ButtonIndex);
+        if (CurrentState != State.Disabled && m_Calender.PointerEnter != null )
+            m_Calender.PointerEnter(m_ButtonIndex, m_Calender);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(CurrentState != State.Disabled)
-            m_Calender.OnPointerDown(m_ButtonIndex, m_ButtonDate);
+        if(CurrentState != State.Disabled && m_Calender.PointerDown != null)
+            m_Calender.PointerDown(m_ButtonIndex, m_ButtonDate, m_Calender);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (CurrentState != State.Disabled)
-            m_Calender.OnPointerExit(m_ButtonIndex);
+        if (CurrentState != State.Disabled && m_Calender.PointerExit != null)
+            m_Calender.PointerExit(m_ButtonIndex, m_Calender);
     }
 
     public void UpdateState(State newState, DateTime? calenderDate, DateTime? selectedStartDate, DateTime? selectedEndDate)

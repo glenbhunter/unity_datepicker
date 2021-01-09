@@ -11,7 +11,7 @@ public class DatePicker : MonoBehaviour
 
     private void Awake()
     {
-        m_Calender.CalenderUpdated += CalenderUpdated;
+        //m_Calender.CalenderUpdated += CalenderUpdated;
     }
 
     public void OnClick_ToggleCalender()
