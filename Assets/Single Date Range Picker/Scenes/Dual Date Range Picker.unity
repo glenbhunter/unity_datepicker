@@ -23983,6 +23983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20abaff1cf16c492491a5ed49e3c0efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_FirstDayOfWeek: 0
+  m_ShowDaysInOtherMonths: 0
   FW_Calender: {fileID: 1745348479}
   SW_Calender: {fileID: 410131873}
 --- !u!114 &1218118817

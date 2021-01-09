@@ -181,7 +181,7 @@ public class Single_DateRangePicker : Calender
 
             // update buttons
             int btnIndex = i;
-            CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString(), (m_ShowDatesInOtherMonths) ? false : (currentDate.Month == CalenderDate.Month) ? false : true);
+//            CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString(), (m_ShowDatesInOtherMonths) ? false : (currentDate.Month == CalenderDate.Month) ? false : true);
 
             // highlight
             if (m_StartDate != null && m_StartDate == currentDate)

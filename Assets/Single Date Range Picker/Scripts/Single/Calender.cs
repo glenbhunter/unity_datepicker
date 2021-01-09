@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Globalization;
 
-public delegate void OnPointerEnter(int buttonIndex, Calender calender);
-public delegate void OnPointerDown(int buttonIndex, DateTime calenderDate, Calender calender);
-public delegate void OnPointerExit(int buttonIndex, Calender calender);
+public delegate void OnPointerEnter(CalenderButton button, Calender calender);
+public delegate void OnPointerDown(CalenderButton button, DateTime calenderDate, Calender calender);
+public delegate void OnPointerExit(CalenderButton button, Calender calender);
 
 public class Calender : MonoBehaviour
 {
@@ -24,6 +24,9 @@ public class Calender : MonoBehaviour
     public OnPointerDown PointerDown;
     public OnPointerExit PointerExit;
 
+
+    
+
     public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths)
     {
         Date = new DateTime(year, month, 1);
@@ -32,41 +35,9 @@ public class Calender : MonoBehaviour
 
         // Time to setup all the buttons! :)
         // create current month starting from 1
-        DateTime currentDate = new DateTime(Date.Year, Date.Month, 1);
-
-        DayOfWeek firstDayOfMonth = currentDate.DayOfWeek;
-
-
-        if (firstDayOfMonth < m_FirstDayOfWeek)
-        {
-
-            // start current date based upon start day of week
-            // this is used to show previous dates before
-            int dayIndex = (int)m_FirstDayOfWeek;
-            int daysBehind = 0;
-
-            for (int i = 0; i < 6; i++)
-            {
-                dayIndex++;
-                daysBehind++;
-
-                if (dayIndex > 6)
-                {
-                    dayIndex = 0;
-                }
-
-                if (dayIndex == (int)firstDayOfMonth)
-                {
-                    currentDate = currentDate.AddDays(-daysBehind);
-                    break;
-                }
-            }
-        }
-        else
-        {
-            // start current date based upon start day of week
-            currentDate = currentDate.AddDays(-(firstDayOfMonth - m_FirstDayOfWeek));
-        }
+        DateTime currentDate;
+        currentDate = (DateTime)StartDate();
+      
 
 
         // update main date heading
@@ -92,7 +63,7 @@ public class Calender : MonoBehaviour
 
             // update buttons
             int btnIndex = i;
-            CalenderButtons[i].Setup(btnIndex, this, currentDate, currentDate.Day.ToString(), (m_ShowDatesInOtherMonths) ? false : (currentDate.Month == Date.Month) ? false : true);
+            CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), (m_ShowDatesInOtherMonths) ? false : (currentDate.Month == Date.Month) ? false : true);
 
             /*
             // highlight
@@ -114,6 +85,48 @@ public class Calender : MonoBehaviour
 
             currentDate = currentDate.AddDays(1);
         }
+    }
+
+    public DateTime? StartDate()
+    {
+        DateTime currentDate = new DateTime(Date.Year, Date.Month, 1);
+
+        DayOfWeek firstDayOfMonth = currentDate.DayOfWeek;
+
+
+        if (firstDayOfMonth < m_FirstDayOfWeek)
+        {
+
+            // start current date based upon start day of week
+            // this is used to show previous dates before
+            int dayIndex = (int)m_FirstDayOfWeek;
+            int daysBehind = 0;
+
+            for (int i = 0; i < 6; i++)
+            {
+                dayIndex++;
+                daysBehind++;
+
+                if (dayIndex > 6)
+                {
+                    dayIndex = 0;
+                }
+
+                if (dayIndex == (int)firstDayOfMonth)
+                {
+                    return currentDate = currentDate.AddDays(-daysBehind);
+                }
+            }
+        }
+        else
+        {
+            // start current date based upon start day of week
+            return currentDate = currentDate.AddDays(-(firstDayOfMonth - m_FirstDayOfWeek));
+        }
+
+        Debug.LogError("Something went wrong, should not be getting here.");
+        return null;
+
     }
 }
 

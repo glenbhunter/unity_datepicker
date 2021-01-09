@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 public class Dual_DateRangePicker : MonoBehaviour
 {
@@ -15,11 +16,12 @@ public class Dual_DateRangePicker : MonoBehaviour
     [SerializeField] Calender SW_Calender;
 
     private DateTime? m_StartDate;
-    private int m_StartDate_SelectedBtnIndex;
+    private CalenderButton m_StartDate_SelectedBTN;
 
     private DateTime? m_EndDate;
-    private int m_EndDate_SelectedBtnIndex;
+    private CalenderButton m_EndDate_SelectedBTN;
 
+    private List<CalenderButton> m_CalenderButtonsToRefresh;
     private void Start()
     {
         Setup();
@@ -42,24 +44,109 @@ public class Dual_DateRangePicker : MonoBehaviour
         SW_Calender.Setup(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths);
     }
 
-    public void OnPointerEnter(int buttonIndex, Calender calender)
+    public void OnPointerEnter(CalenderButton chosenCalenderButton, Calender calender)
     {
-        if (calender.CalenderButtons[buttonIndex].CurrentState == CalenderButton.State.Normal && m_EndDate == null)
+        if (chosenCalenderButton.CurrentState == CalenderButton.State.Normal && m_EndDate == null)
         {
-            calender.CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Hover, calender.Date, m_StartDate, m_EndDate);
+            chosenCalenderButton.UpdateState(CalenderButton.State.Hover, calender.Date, m_StartDate, m_EndDate);
         }
     }
 
-    public void OnPointerDown(int buttonIndex, DateTime calenderDate, Calender calender)
+    public void OnPointerDown(CalenderButton chosenCalenderButton, DateTime chosenDate, Calender calender)
     {
+        // clears selection
+        if (m_StartDate != null && m_EndDate != null)
+        {
+            for (int i = 0; i < m_CalenderButtonsToRefresh.Count; i++)
+            {
+                if (CalenderButtons[i].CurrentState != CalenderButton.State.Disabled)
+                    CalenderButtons[i].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
+            }
+
+            m_StartDate = null;
+            m_EndDate = null;
+
+            // don't return on this one
+        }
+
+        if (m_StartDate == null && m_EndDate == null)
+        {
+            m_StartDate = chosenDate;
+            m_StartDate_SelectedBTN = chosenCalenderButton;
+
+            if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
+                chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
+
+            return;
+        }
+
+
+        // revert, if second date is selected is less that the first chosen ddate
+        if (m_StartDate != null && chosenDate < m_StartDate && m_EndDate == null)
+        {
+
+            // revert previous selected start date
+            m_StartDate_SelectedBTN.UpdateState(CalenderButton.State.Normal, chosenDate, m_StartDate, m_EndDate);
+
+            m_StartDate = chosenDate;
+            m_StartDate_SelectedBTN = chosenCalenderButton;
+
+            if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
+                chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
+
+            //CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
+
+            return;
+        }
+
+        if (m_StartDate != null && m_EndDate == null)
+        {
+            m_EndDate = chosenDate;
+            m_EndDate_SelectedBTN = chosenCalenderButton;
+
+            // select end button
+            chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
+
+            DateTime date = m_StartDate.Value;
+
+            // - 1 to remove first and last selected
+            for (int i = 0; i < (m_EndDate - m_StartDate).Value.TotalDays + 1; i++)
+            {
+                
+                CalenderButton fw_CalenderBTN = FW_Calender.CalenderButtons.Where(x => x.Date == date).FirstOrDefault();
+                CalenderButton sw_CalenderBTN = SW_Calender.CalenderButtons.Where(x => x.Date == date).FirstOrDefault();
+
+                if (fw_CalenderBTN != null)
+                {
+                    Debug.Log("here");
+                    fw_CalenderBTN.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
+                    m_CalenderButtonsToRefresh.Add(fw_CalenderBTN);
+                }
+
+                if (sw_CalenderBTN != null)
+                {
+                    sw_CalenderBTN.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
+                    m_CalenderButtonsToRefresh.Add(sw_CalenderBTN);
+                }
+
+
+                date = date.AddDays(1);
+            }
+
+            //CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
+
+            return;
+        }
     }
 
-    public void OnPointerExit(int buttonIndex, Calender calender)
+   
+
+    public void OnPointerExit(CalenderButton chosenCalenderButton, Calender calender)
     {
-        if (calender.CalenderButtons[buttonIndex].CurrentState == CalenderButton.State.Hover)
+        if (chosenCalenderButton.CurrentState == CalenderButton.State.Hover)
         {
-            if (calender.CalenderButtons[buttonIndex].CurrentState != CalenderButton.State.Disabled)
-                calender.CalenderButtons[buttonIndex].UpdateState(CalenderButton.State.Normal, calender.Date, m_StartDate, m_EndDate);
+            if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
+                chosenCalenderButton.UpdateState(CalenderButton.State.Normal, calender.Date, m_StartDate, m_EndDate);
         }
     }
 }
