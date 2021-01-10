@@ -15,6 +15,9 @@ public class Dual_DateRangePicker : MonoBehaviour
     [SerializeField] Calender FW_Calender;
     [SerializeField] Calender SW_Calender;
 
+    public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
+    public CalenderUpdate CalendersUpdated;
+
     private DateTime? m_StartDate;
     private CalenderButton m_StartDate_SelectedBTN;
 
@@ -23,6 +26,7 @@ public class Dual_DateRangePicker : MonoBehaviour
 
     private List<CalenderButton> m_FW_CalenderButtons_ToRefresh = new List<CalenderButton>();
     private List<CalenderButton> m_SW_CalenderButtons_ToRefresh = new List<CalenderButton>();
+
     private void Start()
     {
         Setup();
@@ -77,12 +81,14 @@ public class Dual_DateRangePicker : MonoBehaviour
 
         if (m_StartDate == null && m_EndDate == null)
         {
-            m_StartDate = chosenDate;
-            m_StartDate_SelectedBTN = chosenCalenderButton;
-
             if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
-                chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
+            {
+                m_StartDate = chosenDate;
+                m_StartDate_SelectedBTN = chosenCalenderButton;
 
+                CalendersUpdated?.Invoke(m_StartDate, m_EndDate);
+                chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
+            }
             return;
         }
 
@@ -90,18 +96,18 @@ public class Dual_DateRangePicker : MonoBehaviour
         // revert, if second date is selected is less that the first chosen ddate
         if (m_StartDate != null && chosenDate < m_StartDate && m_EndDate == null)
         {
-
-            // revert previous selected start date
-            m_StartDate_SelectedBTN.UpdateState(CalenderButton.State.Normal, chosenDate, m_StartDate, m_EndDate);
-
-            m_StartDate = chosenDate;
-            m_StartDate_SelectedBTN = chosenCalenderButton;
-
             if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
+            {
+                // revert previous selected start date
+                m_StartDate_SelectedBTN.UpdateState(CalenderButton.State.Normal, chosenDate, m_StartDate, m_EndDate);
+
+                m_StartDate = chosenDate;
+                m_StartDate_SelectedBTN = chosenCalenderButton;
+
+                CalendersUpdated?.Invoke(m_StartDate, m_EndDate);
                 chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
-
-            //CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
-
+            }
+                
             return;
         }
 
@@ -139,7 +145,7 @@ public class Dual_DateRangePicker : MonoBehaviour
                 date = date.AddDays(1);
             }
 
-            //CalenderUpdated?.Invoke(m_StartDate, m_EndDate);
+            CalendersUpdated?.Invoke(m_StartDate, m_EndDate);
 
             return;
         }

@@ -24,9 +24,6 @@ public class Calender : MonoBehaviour
     public OnPointerDown PointerDown;
     public OnPointerExit PointerExit;
 
-
-    
-
     public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths, DateTime? startDate, DateTime? endDate)
     {
         Date = new DateTime(year, month, 1);
@@ -65,16 +62,16 @@ public class Calender : MonoBehaviour
             int btnIndex = i;
             CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), m_ShowDatesInOtherMonths);
 
-
-           
             // highlight
             if (startDate != null && startDate == currentDate)
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
+                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
             }
             else if (endDate != null && endDate == currentDate)
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
+                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
             }
             else if (startDate != null && endDate != null && currentDate >= startDate && currentDate <= endDate)
             {
