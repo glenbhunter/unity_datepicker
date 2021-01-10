@@ -13,5 +13,6 @@ public class DisableDisplayState : DisplayState
     {
         UITween.ForceColor(m_Image, Color.clear, null, 0f);
         UITween.ForceColor(m_Text, Color.clear, null, 0f);
+        UITween.ForceColor(m_SecondaryImage, Color.clear, null, 0f);
     }
 }

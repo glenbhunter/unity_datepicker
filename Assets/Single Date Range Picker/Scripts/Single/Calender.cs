@@ -27,7 +27,7 @@ public class Calender : MonoBehaviour
 
     
 
-    public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths)
+    public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths, DateTime? startDate, DateTime? endDate)
     {
         Date = new DateTime(year, month, 1);
         m_FirstDayOfWeek = firstDayOfWeek;
@@ -63,25 +63,23 @@ public class Calender : MonoBehaviour
 
             // update buttons
             int btnIndex = i;
-            CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), (m_ShowDatesInOtherMonths) ? false : (currentDate.Month == Date.Month) ? false : true);
+            CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), m_ShowDatesInOtherMonths);
 
-            /*
+
+           
             // highlight
-            if (m_StartDate != null && m_StartDate == currentDate)
+            if (startDate != null && startDate == currentDate)
             {
-                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
-                m_StartDate_SelectedBtnIndex = i;
+                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
             }
-            else if (m_EndDate != null && m_EndDate == currentDate)
+            else if (endDate != null && endDate == currentDate)
             {
-                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, CalenderDate, m_StartDate, m_EndDate);
-                m_EndDate_SelectedBtnIndex = i;
+                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
             }
-
-            if (m_StartDate != null && m_EndDate != null && currentDate >= m_StartDate && currentDate <= m_EndDate)
+            else if (startDate != null && endDate != null && currentDate >= startDate && currentDate <= endDate)
             {
-                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, CalenderDate, m_StartDate, m_EndDate);
-            }*/
+                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
+            }
 
             currentDate = currentDate.AddDays(1);
         }

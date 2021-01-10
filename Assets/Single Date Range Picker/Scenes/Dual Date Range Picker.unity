@@ -17592,7 +17592,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -50, y: -34}
+  m_SizeDelta: {x: -30, y: -34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &875395439
 MonoBehaviour:
@@ -23984,7 +23984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstDayOfWeek: 0
-  m_ShowDaysInOtherMonths: 0
+  m_ShowDaysInOtherMonths: 1
   FW_Calender: {fileID: 1745348479}
   SW_Calender: {fileID: 410131873}
 --- !u!114 &1218118817
@@ -34327,7 +34327,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -50, y: -34}
+  m_SizeDelta: {x: -30, y: -34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1857029178
 MonoBehaviour:
@@ -36173,7 +36173,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -7.5, y: 0}
-  m_SizeDelta: {x: -50, y: -34}
+  m_SizeDelta: {x: -30, y: -34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1950118106
 MonoBehaviour:
@@ -39826,7 +39826,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -50, y: -34}
+  m_SizeDelta: {x: -30, y: -34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2114142917
 MonoBehaviour:
@@ -40147,7 +40147,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -50, y: -34}
+  m_SizeDelta: {x: -30, y: -34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2132685621
 MonoBehaviour:
@@ -40219,7 +40219,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 7.450001, y: 0}
-  m_SizeDelta: {x: -50, y: -34}
+  m_SizeDelta: {x: -30, y: -34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2140725352
 MonoBehaviour:

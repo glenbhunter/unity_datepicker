@@ -21,7 +21,8 @@ public class Dual_DateRangePicker : MonoBehaviour
     private DateTime? m_EndDate;
     private CalenderButton m_EndDate_SelectedBTN;
 
-    private List<CalenderButton> m_CalenderButtonsToRefresh;
+    private List<CalenderButton> m_FW_CalenderButtons_ToRefresh = new List<CalenderButton>();
+    private List<CalenderButton> m_SW_CalenderButtons_ToRefresh = new List<CalenderButton>();
     private void Start()
     {
         Setup();
@@ -40,8 +41,8 @@ public class Dual_DateRangePicker : MonoBehaviour
         SW_Calender.PointerDown += OnPointerDown;
         SW_Calender.PointerExit += OnPointerExit;
 
-        FW_Calender.Setup(DateTime.Now.Year, DateTime.Now.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths);
-        SW_Calender.Setup(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths);
+        FW_Calender.Setup(DateTime.Now.Year, DateTime.Now.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate);
+        SW_Calender.Setup(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate);
     }
 
     public void OnPointerEnter(CalenderButton chosenCalenderButton, Calender calender)
@@ -57,10 +58,15 @@ public class Dual_DateRangePicker : MonoBehaviour
         // clears selection
         if (m_StartDate != null && m_EndDate != null)
         {
-            for (int i = 0; i < m_CalenderButtonsToRefresh.Count; i++)
+            for (int i = 0; i < m_FW_CalenderButtons_ToRefresh.Count; i++)
             {
-                if (CalenderButtons[i].CurrentState != CalenderButton.State.Disabled)
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Normal, CalenderDate, m_StartDate, m_EndDate);
+                m_FW_CalenderButtons_ToRefresh[i].ResetToOriginal();
+            }
+
+        
+            for (int i = 0; i < m_SW_CalenderButtons_ToRefresh.Count; i++)
+            {
+                m_SW_CalenderButtons_ToRefresh[i].ResetToOriginal();
             }
 
             m_StartDate = null;
@@ -120,13 +126,13 @@ public class Dual_DateRangePicker : MonoBehaviour
                 {
                     Debug.Log("here");
                     fw_CalenderBTN.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
-                    m_CalenderButtonsToRefresh.Add(fw_CalenderBTN);
+                    m_FW_CalenderButtons_ToRefresh.Add(fw_CalenderBTN);
                 }
 
                 if (sw_CalenderBTN != null)
                 {
                     sw_CalenderBTN.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
-                    m_CalenderButtonsToRefresh.Add(sw_CalenderBTN);
+                    m_SW_CalenderButtons_ToRefresh.Add(sw_CalenderBTN);
                 }
 
 
@@ -148,5 +154,23 @@ public class Dual_DateRangePicker : MonoBehaviour
             if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
                 chosenCalenderButton.UpdateState(CalenderButton.State.Normal, calender.Date, m_StartDate, m_EndDate);
         }
+    }
+
+    public void OnClick_NextCalenderMonth()
+    { 
+        FW_Calender.Date = FW_Calender.Date.AddMonths(1);
+        SW_Calender.Date = SW_Calender.Date.AddMonths(1);
+
+        FW_Calender.Setup(FW_Calender.Date.Year, FW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate);
+        SW_Calender.Setup(SW_Calender.Date.Year, SW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate);
+    }
+
+    public void OnClick_PreviousCalenderMonth()
+    {
+        FW_Calender.Date = FW_Calender.Date.AddMonths(-1);
+        SW_Calender.Date = SW_Calender.Date.AddMonths(-1);
+
+        FW_Calender.Setup(FW_Calender.Date.Year, FW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate);
+        SW_Calender.Setup(SW_Calender.Date.Year, SW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate);
     }
 }

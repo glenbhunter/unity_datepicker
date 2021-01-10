@@ -30,21 +30,16 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
     private Calender m_Calender;
     public DateTime Date { get; private set; }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="buttonIndex"></param>
-    /// <param name="calender"></param>
-    /// <param name="buttonDate"></param>
-    /// <param name="text"></param>
-    /// <param name="disable">decided whether or not to disable button, generally used if the calender date does not want to be shown</param>
-    public void Setup(Calender calender, DateTime buttonDate, string text, bool disable)
+    private bool m_ShowDaysInOtherMonths;
+
+    public void Setup(Calender calender, DateTime buttonDate, string text, bool showDaysInOtherMonths)
     {
 
         m_DisplayDictionary = new Dictionary<State, DisplayState>();
         m_Calender = calender;
         Date = buttonDate;
         m_Text.text = text;
+        m_ShowDaysInOtherMonths = showDaysInOtherMonths;
 
         m_DisplayDictionary.Add(State.Normal, m_NormalState);
         m_DisplayDictionary.Add(State.Hover, m_HoverState);
@@ -52,7 +47,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         m_DisplayDictionary.Add(State.Highlighted, m_HighlightedState);
         m_DisplayDictionary.Add(State.Disabled, m_DisabledState);
 
-        if (disable)
+        if (m_ShowDaysInOtherMonths && buttonDate.Month != calender.Date.Month)
         {
             UpdateState(State.Disabled, m_Calender.Date, null, null);
             return;
@@ -60,6 +55,19 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
         // Force normal display script to trigger
         UpdateState(State.Normal, m_Calender.Date, null, null);
+    }
+
+    public void ResetToOriginal()
+    {
+        if (m_ShowDaysInOtherMonths && Date.Month != m_Calender.Date.Month)
+        {
+            UpdateState(State.Disabled, m_Calender.Date, null, null);
+            return;
+        }
+        else
+        {
+            UpdateState(State.Normal, m_Calender.Date, null, null);
+        }
     }
 
 
