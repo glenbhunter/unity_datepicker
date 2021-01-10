@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 public class Dual_DateRangePicker : MonoBehaviour
@@ -32,7 +30,7 @@ public class Dual_DateRangePicker : MonoBehaviour
         Setup();
     }
 
-    private void Setup()
+    public void Setup()
     {
         FW_Calender.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         SW_Calender.Date = FW_Calender.Date.AddMonths(1);

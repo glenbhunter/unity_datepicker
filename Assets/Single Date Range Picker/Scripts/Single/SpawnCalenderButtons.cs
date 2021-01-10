@@ -51,7 +51,7 @@ public class SpawnCalenderButtons : MonoBehaviour
                 currentRow = i / 7;
 
             GameObject gameObject = Instantiate(m_CalenderButtonPrefab.gameObject, m_Rows[currentRow].transform, false);
-            //m_Calender.CalenderButtons.Add(gameObject.GetComponent<CalenderButton>());
+            m_Calender.CalenderButtons.Add(gameObject.GetComponent<CalenderButton>());
         }
 
         //m_Calender.CalenderDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
