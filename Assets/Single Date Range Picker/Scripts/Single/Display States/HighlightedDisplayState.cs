@@ -5,9 +5,6 @@ using System;
 
 public class HighlightedDisplayState : DisplayState
 {
-    [SerializeField] Image m_Primary_Image;
-    [SerializeField] Image m_Highlight_Image;
-
     [SerializeField] Sprite m_FirstSelectionDate_HighlightSprite;
     [SerializeField] Sprite m_InBetween_Dates_HighlightSprite;
     [SerializeField] Sprite m_LastSelectionDate_HighlightSprite;
@@ -18,18 +15,18 @@ public class HighlightedDisplayState : DisplayState
     {
         if(buttonDate == selectedStartDate)
         {
-            m_Highlight_Image.sprite = m_FirstSelectionDate_HighlightSprite;
+            SecondaryImage.sprite = m_FirstSelectionDate_HighlightSprite;
         }
         else if(buttonDate > selectedStartDate && buttonDate < selectedEndDate)
         {
-            m_Highlight_Image.sprite = m_InBetween_Dates_HighlightSprite;
-            m_Primary_Image.color = Color.clear;
+            SecondaryImage.sprite = m_InBetween_Dates_HighlightSprite;
+            PrimaryImage.color = Color.clear;
         }
         else if(buttonDate == selectedEndDate)
         {
-            m_Highlight_Image.sprite = m_LastSelectionDate_HighlightSprite;
+            SecondaryImage.sprite = m_LastSelectionDate_HighlightSprite;
         }
 
-        m_Highlight_Image.color = m_Highlight_Image_Color;
+        SecondaryImage.color = m_Highlight_Image_Color;
     }
 }

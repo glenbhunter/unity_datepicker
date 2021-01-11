@@ -16,9 +16,11 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         Disabled,
     }
 
-    [SerializeField] Text m_Text;
+    [SerializeField] Text m_ButtonText;
 
     private Dictionary<State, DisplayState> m_DisplayDictionary;
+    [SerializeField] Image m_ButtonPrimaryImage;
+    [SerializeField] Image m_ButtonSecondaryImage;
     [SerializeField] DisplayState m_NormalState;
     [SerializeField] DisplayState m_SelectedState;
     [SerializeField] DisplayState m_HoverState;
@@ -38,7 +40,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         m_DisplayDictionary = new Dictionary<State, DisplayState>();
         m_Calender = calender;
         Date = buttonDate;
-        m_Text.text = text;
+        m_ButtonText.text = text;
         m_ShowDaysInOtherMonths = showDaysInOtherMonths;
 
         m_DisplayDictionary.Add(State.Normal, m_NormalState);
@@ -46,6 +48,11 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         m_DisplayDictionary.Add(State.Selected, m_SelectedState);
         m_DisplayDictionary.Add(State.Highlighted, m_HighlightedState);
         m_DisplayDictionary.Add(State.Disabled, m_DisabledState);
+
+        foreach(KeyValuePair<State, DisplayState> displayState in m_DisplayDictionary)
+        {
+            displayState.Value.Setup(m_ButtonPrimaryImage, m_ButtonSecondaryImage, m_ButtonText);
+        }
 
         if (m_ShowDaysInOtherMonths && buttonDate.Month != calender.Date.Month)
         {

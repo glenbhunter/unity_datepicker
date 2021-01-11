@@ -209,7 +209,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6367b2a9e388249eaa7ad70209051527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Text: {fileID: 3965394324698099415}
+  m_ButtonText: {fileID: 0}
+  m_ButtonPrimaryImage: {fileID: 9112606524210455842}
+  m_ButtonSecondaryImage: {fileID: 1157848042937354081}
   m_NormalState: {fileID: 114418215014950898}
   m_SelectedState: {fileID: 114023816492044268}
   m_HoverState: {fileID: 114877752753692514}
@@ -229,7 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BtnImageColor:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_BtnTextColor:
     serializedVersion: 2
     rgba: 4281874488
@@ -238,10 +240,7 @@ MonoBehaviour:
     rgba: 4294967295
   m_Btn_TextColor_NotInMonth:
     serializedVersion: 2
-    rgba: 1681406008
-  m_Text: {fileID: 3965394324698099415}
-  m_Image: {fileID: 9112606524210455842}
-  m_SecondaryImage: {fileID: 1157848042937354081}
+    rgba: 4294967295
 --- !u!114 &114877752753692514
 MonoBehaviour:
   m_ObjectHideFlags: 0
