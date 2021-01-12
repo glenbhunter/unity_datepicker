@@ -21,7 +21,6 @@ public class Dual_DateRangePicker : MonoBehaviour
 
     private DateTime? m_StartDate;
     private CalenderButton m_StartDate_SelectedBTN;
-
     private DateTime? m_EndDate;
 
     private void Start()
