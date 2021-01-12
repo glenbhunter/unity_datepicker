@@ -15,16 +15,15 @@ public class Dual_CalenderSpawnButtons : MonoBehaviour
     [SerializeField] Calender sw_Calender;
     [SerializeField] Transform[] sw_Rows;
 
-    [SerializeField] bool m_Debug = false;
+    [SerializeField] bool m_Spawn = false;
 
     private void Update()
     {
-        if (m_Debug)
+        if (m_Spawn)
         {
-            m_Debug = false;
+            m_Spawn = false;
 
             Spawn_CalenderButtons();
-            //m_DateRangePicker.Setup();
         }
     }
 

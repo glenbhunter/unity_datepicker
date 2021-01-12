@@ -56,7 +56,6 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
         if (!m_ShowDaysInOtherMonths && buttonDate.Month != calender.Date.Month)
         {
-            Debug.Log("Here");
             UpdateState(State.Disabled, m_Calender.Date, null, null);
             return;
         }
@@ -69,7 +68,6 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
     {
         if (!m_ShowDaysInOtherMonths && Date.Month != m_Calender.Date.Month)
         {
-            Debug.Log("Here");
             UpdateState(State.Disabled, m_Calender.Date, null, null);
             return;
         }

@@ -14,6 +14,8 @@ public class Dual_DateRangePicker : MonoBehaviour
     [SerializeField] Calender SW_Calender;
     [SerializeField] UITweenManager UITweenManager;
 
+    private bool m_CalenderToggle = false;
+
     public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
     public CalenderUpdate CalendersUpdated;
 
@@ -188,6 +190,15 @@ public class Dual_DateRangePicker : MonoBehaviour
         SW_Calender.Setup(SW_Calender.Date.Year, SW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
     }
 
+    public void OnClick_NextCalenderYear()
+    {
+        FW_Calender.Date = FW_Calender.Date.AddYears(1);
+        SW_Calender.Date = SW_Calender.Date.AddYears(1);
+
+        FW_Calender.Setup(FW_Calender.Date.Year, FW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
+        SW_Calender.Setup(SW_Calender.Date.Year, SW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
+    }
+
     public void OnClick_PreviousCalenderMonth()
     {
         FW_Calender.Date = FW_Calender.Date.AddMonths(-1);
@@ -195,5 +206,23 @@ public class Dual_DateRangePicker : MonoBehaviour
 
         FW_Calender.Setup(FW_Calender.Date.Year, FW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
         SW_Calender.Setup(SW_Calender.Date.Year, SW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
+    }
+
+    public void OnClick_PreviousCalenderYear()
+    {
+        Debug.Log("Here");
+        FW_Calender.Date = FW_Calender.Date.AddYears(-1);
+        SW_Calender.Date = SW_Calender.Date.AddYears(-1);
+
+        FW_Calender.Setup(FW_Calender.Date.Year, FW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
+        SW_Calender.Setup(SW_Calender.Date.Year, SW_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
+    }
+
+    public void OnClick_ToggleCalenders()
+    {
+        m_CalenderToggle = !m_CalenderToggle;
+
+        FW_Calender.gameObject.SetActive(m_CalenderToggle);
+        SW_Calender.gameObject.SetActive(m_CalenderToggle);
     }
 }
