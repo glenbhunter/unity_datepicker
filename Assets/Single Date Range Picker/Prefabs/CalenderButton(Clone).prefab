@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6367b2a9e388249eaa7ad70209051527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ButtonText: {fileID: 0}
+  m_ButtonText: {fileID: 3965394324698099415}
   m_ButtonPrimaryImage: {fileID: 9112606524210455842}
   m_ButtonSecondaryImage: {fileID: 1157848042937354081}
   m_NormalState: {fileID: 114418215014950898}
@@ -259,8 +259,6 @@ MonoBehaviour:
   m_BtnTextColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_Text: {fileID: 3965394324698099415}
-  m_Image: {fileID: 9112606524210455842}
 --- !u!114 &114023816492044268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,8 +277,6 @@ MonoBehaviour:
   m_BtnTextColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_Text: {fileID: 3965394324698099415}
-  m_Image: {fileID: 9112606524210455842}
 --- !u!114 &114867715374746712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,8 +289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97bc0f2fe435e4363ae1d19951bfbc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Primary_Image: {fileID: 9112606524210455842}
-  m_Highlight_Image: {fileID: 1157848042937354081}
   m_FirstSelectionDate_HighlightSprite: {fileID: 21300000, guid: dc94ab512ebec45028d7b49b74dd6c87,
     type: 3}
   m_InBetween_Dates_HighlightSprite: {fileID: 21300000, guid: 544254c1339e04932b784967aebaa1d7,
@@ -316,9 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00d95f725a9bc4909a37a5325ddc40f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Text: {fileID: 3965394324698099415}
-  m_Image: {fileID: 9112606524210455842}
-  m_SecondaryImage: {fileID: 1157848042937354081}
 --- !u!1 &3965394324698099413
 GameObject:
   m_ObjectHideFlags: 0

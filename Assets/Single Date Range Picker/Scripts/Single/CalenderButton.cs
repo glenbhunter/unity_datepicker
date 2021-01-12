@@ -34,7 +34,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
     private bool m_ShowDaysInOtherMonths;
 
-    public void Setup(Calender calender, DateTime buttonDate, string text, bool showDaysInOtherMonths)
+    public void Setup(Calender calender, DateTime buttonDate, string text, bool showDaysInOtherMonths, UITweenManager uiTweenManager)
     {
 
         m_DisplayDictionary = new Dictionary<State, DisplayState>();
@@ -51,7 +51,7 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
         foreach(KeyValuePair<State, DisplayState> displayState in m_DisplayDictionary)
         {
-            displayState.Value.Setup(m_ButtonPrimaryImage, m_ButtonSecondaryImage, m_ButtonText);
+            displayState.Value.Setup(m_ButtonPrimaryImage, m_ButtonSecondaryImage, m_ButtonText, uiTweenManager);
         }
 
         if (m_ShowDaysInOtherMonths && buttonDate.Month != calender.Date.Month)

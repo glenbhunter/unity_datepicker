@@ -3,29 +3,13 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace GlenHunter
-{
+
     /// <summary>
     /// This must in scene in order for tweening to work
     /// </summary>
     public class UITweenManager : MonoBehaviour
     {
-        public static UITweenManager Instance { get; private set; }
         private List<UIItem> m_TweeningItems = new List<UIItem>();
-
-        private void Awake()
-        {
-
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-
-            Instance = this;
-
-            DontDestroyOnLoad(this);
-        }
        
         public void Tween(Text textComponent, Color32 to, UnityAction onComplete, float duration = 1)
         {
@@ -234,29 +218,4 @@ namespace GlenHunter
                 }
             }
         }
-
-    }
-
-    public static class UITween
-    {
-        public static void Color(Text textComponent, Color32 to, UnityAction onComplete, float duration = 1)
-        {
-            UITweenManager.Instance.Tween(textComponent, to, onComplete, duration);
-        }
-
-        public static void Color(Image imageComponent, Color32 to, UnityAction onComplete, float duration = 1)
-        {
-            UITweenManager.Instance.Tween(imageComponent, to, onComplete, duration);
-        }
-
-        public static void ForceColor(Text textComponent, Color32 to, UnityAction onComplete, float duration = 1)
-        {
-            UITweenManager.Instance.ForceTween(textComponent, to, onComplete, duration);
-        }
-
-        public static void ForceColor(Image imageComponent, Color32 to, UnityAction onComplete, float duration = 1)
-        {
-            UITweenManager.Instance.ForceTween(imageComponent, to, onComplete, duration);
-        }
-    }
 }

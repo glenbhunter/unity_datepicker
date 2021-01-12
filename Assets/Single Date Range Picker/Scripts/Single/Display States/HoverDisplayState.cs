@@ -1,6 +1,4 @@
-﻿using GlenHunter;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using System;
 
 public class HoverDisplayState : DisplayState
@@ -10,7 +8,7 @@ public class HoverDisplayState : DisplayState
 
     public override void UpdateState(DateTime? buttonDate, DateTime? calenderDate, DateTime? selectedStartDate, DateTime? selectedEndDate)
     {
-        UITween.ForceColor(PrimaryImage, m_BtnImageColor, null, 0f);
-        UITween.ForceColor(ButtonText, m_BtnTextColor, null, 0f);
+        UITweenManager.ForceTween(PrimaryImage, m_BtnImageColor, null, 0f);
+        UITweenManager.ForceTween(ButtonText, m_BtnTextColor, null, 0f);
     }
 }

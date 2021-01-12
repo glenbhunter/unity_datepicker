@@ -1,6 +1,4 @@
-﻿using GlenHunter;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using System;
 
 public class SelectedDisplayState : DisplayState
@@ -10,7 +8,7 @@ public class SelectedDisplayState : DisplayState
 
     public override void UpdateState(DateTime? buttonDate, DateTime? calenderDate, DateTime? selectedStartDate, DateTime? selectedEndDate)
     {
-        UITween.ForceColor(PrimaryImage, m_BtnImageColor, null, .1f);
-        UITween.ForceColor(ButtonText, m_BtnTextColor, null, .1f);
+        UITweenManager.ForceTween(PrimaryImage, m_BtnImageColor, null, .1f);
+        UITweenManager.ForceTween(ButtonText, m_BtnTextColor, null, .1f);
     }
 }

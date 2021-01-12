@@ -6,11 +6,14 @@ public class DisplayState : MonoBehaviour
     protected Image PrimaryImage { get; private set; }
     protected Image SecondaryImage { get; private set; }
     protected Text ButtonText { get; private set; }
-    public virtual void Setup(Image primaryImage, Image secondaryImage, Text buttonText)
+    protected UITweenManager UITweenManager { get; private set; }
+   
+    public virtual void Setup(Image primaryImage, Image secondaryImage, Text buttonText, UITweenManager uitweenManager)
     {
         PrimaryImage = primaryImage;
         SecondaryImage = secondaryImage;
         ButtonText = buttonText;
+        UITweenManager = uitweenManager;
     }
 
     /// <summary>

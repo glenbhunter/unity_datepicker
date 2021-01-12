@@ -24,7 +24,7 @@ public class Calender : MonoBehaviour
     public OnPointerDown PointerDown;
     public OnPointerExit PointerExit;
 
-    public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths, DateTime? startDate, DateTime? endDate)
+    public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths, DateTime? startDate, DateTime? endDate, UITweenManager uiTweenManager)
     {
         Date = new DateTime(year, month, 1);
         m_FirstDayOfWeek = firstDayOfWeek;
@@ -59,11 +59,22 @@ public class Calender : MonoBehaviour
             }
 
             // update buttons
-            int btnIndex = i;
-            CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), m_ShowDatesInOtherMonths);
+          
+            CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), m_ShowDatesInOtherMonths, uiTweenManager);
 
-            // highlight
-            if (startDate != null && startDate == currentDate)
+            // single selection
+            if (startDate != null && startDate == currentDate && endDate == null)
+            {
+                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
+            }
+            // single selection but we also need to show highlight
+            else if(startDate != null && startDate == currentDate)
+            {
+                CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
+                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
+            }
+            // single 'end' selection
+            else if (endDate != null && endDate == currentDate && startDate != null)
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
                 CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
@@ -71,7 +82,6 @@ public class Calender : MonoBehaviour
             else if (endDate != null && endDate == currentDate)
             {
                 CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
-                CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
             }
             else if (startDate != null && endDate != null && currentDate >= startDate && currentDate <= endDate)
             {

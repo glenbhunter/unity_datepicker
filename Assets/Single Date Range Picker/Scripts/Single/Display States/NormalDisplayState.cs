@@ -1,5 +1,4 @@
 ﻿using System;
-using GlenHunter;
 using UnityEngine;
 
 public class NormalDisplayState : DisplayState
@@ -19,13 +18,13 @@ public class NormalDisplayState : DisplayState
         {
             if (buttonDate.Value.Month == calenderDate.Value.Month)
             {
-                UITween.ForceColor(PrimaryImage, m_BtnImageColor, null, 0f);
-                UITween.ForceColor(ButtonText, m_BtnTextColor, null, 0f);
+                UITweenManager.ForceTween(PrimaryImage, m_BtnImageColor, null, 0f);
+                UITweenManager.ForceTween(ButtonText, m_BtnTextColor, null, 0f);
             }
             else
             {
-                UITween.ForceColor(PrimaryImage, m_Btn_ImageColor_NotInMonth, null, 0f);
-                UITween.ForceColor(ButtonText, m_Btn_TextColor_NotInMonth, null, 0f);
+                UITweenManager.ForceTween(PrimaryImage, m_Btn_ImageColor_NotInMonth, null, 0f);
+                UITweenManager.ForceTween(ButtonText, m_Btn_TextColor_NotInMonth, null, 0f);
             }
         }
         else
