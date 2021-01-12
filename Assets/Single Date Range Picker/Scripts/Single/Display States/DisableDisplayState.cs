@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-
 public class DisableDisplayState : DisplayState
 {
     public override void UpdateState(DateTime? buttonDate, DateTime? calenderDate, DateTime? selectedStartDate, DateTime? selectedEndDate)

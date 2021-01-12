@@ -240,7 +240,7 @@ MonoBehaviour:
     rgba: 4294967295
   m_Btn_TextColor_NotInMonth:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 842545208
 --- !u!114 &114877752753692514
 MonoBehaviour:
   m_ObjectHideFlags: 0

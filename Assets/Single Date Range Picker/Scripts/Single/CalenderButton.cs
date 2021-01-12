@@ -54,8 +54,9 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
             displayState.Value.Setup(m_ButtonPrimaryImage, m_ButtonSecondaryImage, m_ButtonText, uiTweenManager);
         }
 
-        if (m_ShowDaysInOtherMonths && buttonDate.Month != calender.Date.Month)
+        if (!m_ShowDaysInOtherMonths && buttonDate.Month != calender.Date.Month)
         {
+            Debug.Log("Here");
             UpdateState(State.Disabled, m_Calender.Date, null, null);
             return;
         }
@@ -66,15 +67,15 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
 
     public void ResetToOriginal()
     {
-        if (m_ShowDaysInOtherMonths && Date.Month != m_Calender.Date.Month)
+        if (!m_ShowDaysInOtherMonths && Date.Month != m_Calender.Date.Month)
         {
+            Debug.Log("Here");
             UpdateState(State.Disabled, m_Calender.Date, null, null);
             return;
         }
-        else
-        {
-            UpdateState(State.Normal, m_Calender.Date, null, null);
-        }
+
+        // Force normal display script to trigger
+        UpdateState(State.Normal, m_Calender.Date, null, null);
     }
 
 

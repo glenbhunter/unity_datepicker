@@ -8,8 +8,8 @@ public class Dual_DateRangePicker : MonoBehaviour
 {
     // FW == First Window Calender
     // SW == Second Window Calender
-    [SerializeField] DayOfWeek m_FirstDayOfWeek;
-    [SerializeField] bool m_ShowDaysInOtherMonths;
+    [SerializeField] DayOfWeek m_FirstDayOfWeek = DayOfWeek.Monday;
+    [SerializeField] bool m_ShowDaysInOtherMonths = false;
     [SerializeField] Calender FW_Calender;
     [SerializeField] Calender SW_Calender;
     [SerializeField] UITweenManager UITweenManager;
@@ -21,7 +21,6 @@ public class Dual_DateRangePicker : MonoBehaviour
     private CalenderButton m_StartDate_SelectedBTN;
 
     private DateTime? m_EndDate;
-    private CalenderButton m_EndDate_SelectedBTN;
 
     private void Start()
     {
@@ -105,27 +104,31 @@ public class Dual_DateRangePicker : MonoBehaviour
         if (m_StartDate != null && m_EndDate == null)
         {
             m_EndDate = chosenDate;
-            m_EndDate_SelectedBTN = chosenCalenderButton;
 
             // select end button
             chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
 
             DateTime date = m_StartDate.Value;
 
-            // - 1 to remove first and last selected
+            bool datesOverlap = DoDatesOverlap(m_StartDate.Value, m_EndDate.Value, FW_Calender, SW_Calender);
+            Debug.Log(datesOverlap);
+
+        
             for (int i = 0; i < (m_EndDate - m_StartDate).Value.TotalDays + 1; i++)
             {
-                
-                CalenderButton fw_CalenderBTN = FW_Calender.CalenderButtons.Where(x => x.Date == date).FirstOrDefault();
-                CalenderButton sw_CalenderBTN = SW_Calender.CalenderButtons.Where(x => x.Date == date).FirstOrDefault();
 
-                if (fw_CalenderBTN != null)
+                CalenderButton fw_CalenderBTN = null;
+                CalenderButton sw_CalenderBTN = null;
+
+                fw_CalenderBTN = FW_Calender.CalenderButtons.Where(x => x.Date == date && x.CurrentState != CalenderButton.State.Disabled).FirstOrDefault();
+                sw_CalenderBTN = SW_Calender.CalenderButtons.Where(x => x.Date == date && x.CurrentState != CalenderButton.State.Disabled).FirstOrDefault();
+
+                if (fw_CalenderBTN != null && DateIsInCalenderMonth(date, FW_Calender.Date))
                 {
-                    Debug.Log("here");
                     fw_CalenderBTN.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
                 }
 
-                if (sw_CalenderBTN != null)
+                if (sw_CalenderBTN != null && DateIsInCalenderMonth(date, SW_Calender.Date))
                 {
                     sw_CalenderBTN.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
                 }
@@ -138,6 +141,31 @@ public class Dual_DateRangePicker : MonoBehaviour
 
             return;
         }
+    }
+
+    private bool DateIsInCalenderMonth(DateTime chosenDate, DateTime calenderDate)
+    {
+        if(calenderDate.Month == chosenDate.Month)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool DoDatesOverlap(DateTime selectedStartDate, DateTime selectedEndDate, Calender calender1, Calender calender2)
+    {
+        DateTime c1_StartDate = calender1.StartDate().Value;
+        DateTime c1_EndDate = c1_StartDate.AddDays(42);
+
+        DateTime c2_StartDate = calender2.StartDate().Value;
+
+        if(selectedStartDate < c2_StartDate  && selectedStartDate <= c1_EndDate)
+        {
+            return true;
+        }
+      
+        return false;
     }
 
    
