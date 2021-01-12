@@ -14,8 +14,6 @@ public class Dual_DateRangePicker : MonoBehaviour
     [SerializeField] Calender SW_Calender;
     [SerializeField] UITweenManager UITweenManager;
 
-    private bool m_CalenderToggle = false;
-
     public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
     public CalenderUpdate CalendersUpdated;
 
@@ -111,10 +109,6 @@ public class Dual_DateRangePicker : MonoBehaviour
 
             DateTime date = m_StartDate.Value;
 
-            bool datesOverlap = DoDatesOverlap(m_StartDate.Value, m_EndDate.Value, FW_Calender, SW_Calender);
-            Debug.Log(datesOverlap);
-
-        
             for (int i = 0; i < (m_EndDate - m_StartDate).Value.TotalDays + 1; i++)
             {
 
@@ -154,22 +148,6 @@ public class Dual_DateRangePicker : MonoBehaviour
         return false;
     }
 
-    private bool DoDatesOverlap(DateTime selectedStartDate, DateTime selectedEndDate, Calender calender1, Calender calender2)
-    {
-        DateTime c1_StartDate = calender1.StartDate().Value;
-        DateTime c1_EndDate = c1_StartDate.AddDays(42);
-
-        DateTime c2_StartDate = calender2.StartDate().Value;
-
-        if(selectedStartDate < c2_StartDate  && selectedStartDate <= c1_EndDate)
-        {
-            return true;
-        }
-      
-        return false;
-    }
-
-   
 
     public void OnPointerExit(CalenderButton chosenCalenderButton, Calender calender)
     {
@@ -209,7 +187,6 @@ public class Dual_DateRangePicker : MonoBehaviour
 
     public void OnClick_PreviousCalenderYear()
     {
-        Debug.Log("Here");
         FW_Calender.Date = FW_Calender.Date.AddYears(-1);
         SW_Calender.Date = SW_Calender.Date.AddYears(-1);
 
@@ -219,9 +196,7 @@ public class Dual_DateRangePicker : MonoBehaviour
 
     public void OnClick_ToggleCalenders()
     {
-        m_CalenderToggle = !m_CalenderToggle;
-
-        FW_Calender.gameObject.SetActive(m_CalenderToggle);
-        SW_Calender.gameObject.SetActive(m_CalenderToggle);
+        FW_Calender.gameObject.SetActive(FW_Calender.gameObject.activeInHierarchy);
+        SW_Calender.gameObject.SetActive(SW_Calender.gameObject.activeInHierarchy);
     }
 }
