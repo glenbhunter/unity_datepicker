@@ -46,7 +46,16 @@ public class CalenderButton : MonoBehaviour, IPointerEnterHandler, IPointerDownH
         m_DisplayDictionary.Add(State.Normal, m_NormalState);
         m_DisplayDictionary.Add(State.Hover, m_HoverState);
         m_DisplayDictionary.Add(State.Selected, m_SelectedState);
-        m_DisplayDictionary.Add(State.Highlighted, m_HighlightedState);
+
+        if(m_HighlightedState != null)
+        {
+            m_DisplayDictionary.Add(State.Highlighted, m_HighlightedState);
+        }
+        else
+        {
+            Debug.Log("WARNING there's not highlight script defined, if this is the case, no highlight will be shown");
+        }
+
         m_DisplayDictionary.Add(State.Disabled, m_DisabledState);
 
         foreach(KeyValuePair<State, DisplayState> displayState in m_DisplayDictionary)
