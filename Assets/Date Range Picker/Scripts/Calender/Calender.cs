@@ -8,6 +8,14 @@ using System.Globalization;
 public delegate void OnPointerEnter(CalenderButton button, Calender calender);
 public delegate void OnPointerDown(CalenderButton button, DateTime calenderDate, Calender calender);
 public delegate void OnPointerExit(CalenderButton button, Calender calender);
+/// <summary>
+/// Called when setup was called() and is in the process of updating/iterating over each button state, good for highlighting selected dates
+/// of a calender button - Setup is generally called when a calender has changed month or year and needs to be refreshed,
+/// 
+/// </summary>
+/// <param name="calenderButton"></param>
+/// <param name="calenderButton"></param>
+public delegate void OnCalenderRefreshed(DateTime calenderDate, CalenderButton calenderButton, DateTime buttonDate);
 
 public class Calender : MonoBehaviour
 {
@@ -23,6 +31,7 @@ public class Calender : MonoBehaviour
     public OnPointerEnter PointerEnter;
     public OnPointerDown PointerDown;
     public OnPointerExit PointerExit;
+    public OnCalenderRefreshed CalenderRefreshed;
 
     public void Setup(int year, int month, DayOfWeek firstDayOfWeek, bool showDaysInOtherMonths, DateTime? startDate, DateTime? endDate, UITweenManager uiTweenManager)
     {
@@ -62,7 +71,13 @@ public class Calender : MonoBehaviour
           
             CalenderButtons[i].Setup(this, currentDate, currentDate.Day.ToString(), m_ShowDatesInOtherMonths, uiTweenManager);
 
-            if(DateIsInCalenderMonth(currentDate, Date))
+            if(CalenderRefreshed != null)
+            {
+                CalenderRefreshed(Date, CalenderButtons[i], currentDate);
+            }
+
+            /*
+            if (DateIsInCalenderMonth(currentDate, Date))
             {
                 // single selection
                 if (startDate != null && startDate == currentDate && endDate == null)
@@ -89,11 +104,12 @@ public class Calender : MonoBehaviour
                 {
                     CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
                 }
-            }
+            }*/
 
             currentDate = currentDate.AddDays(1);
         }
     }
+
 
     private bool DateIsInCalenderMonth(DateTime chosenDate, DateTime calenderDate)
     {

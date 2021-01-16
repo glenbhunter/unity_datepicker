@@ -21,6 +21,7 @@ public class HighlightedDisplayState : DisplayState
         {
             SecondaryImage.sprite = m_InBetween_Dates_HighlightSprite;
             PrimaryImage.color = Color.clear;
+            Debug.Log("here");
         }
         else if(buttonDate == selectedEndDate)
         {

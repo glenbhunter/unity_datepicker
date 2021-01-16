@@ -39,6 +39,9 @@ public class Dual_DateRangePicker : MonoBehaviour
         SW_Calender.PointerDown += OnPointerDown;
         SW_Calender.PointerExit += OnPointerExit;
 
+        FW_Calender.CalenderRefreshed += OnCalenderRefreshed;
+        SW_Calender.CalenderRefreshed += OnCalenderRefreshed;
+
         FW_Calender.Setup(DateTime.Now.Year, DateTime.Now.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
         SW_Calender.Setup(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
     }
@@ -135,6 +138,38 @@ public class Dual_DateRangePicker : MonoBehaviour
             CalendersUpdated?.Invoke(m_StartDate, m_EndDate);
 
             return;
+        }
+    }
+
+    public void OnCalenderRefreshed(DateTime calenderDate, CalenderButton calenderButton, DateTime buttonDate)
+    {
+        if (DateIsInCalenderMonth(calenderDate, buttonDate))
+        {
+            // single selection
+            if (m_StartDate != null && m_StartDate == buttonDate && m_EndDate == null)
+            {
+                calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+            }
+            // single selection but we also need to show highlight
+            else if (m_StartDate != null && m_StartDate == buttonDate)
+            {
+                calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+                calenderButton.UpdateState(CalenderButton.State.Highlighted, buttonDate, m_StartDate, m_EndDate);
+            }
+            // single 'end' selection
+            else if (m_EndDate != null && m_EndDate == buttonDate && m_StartDate != null)
+            {
+                calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+                calenderButton.UpdateState(CalenderButton.State.Highlighted, buttonDate, m_StartDate, m_EndDate);
+            }
+            else if (m_EndDate != null && m_EndDate == buttonDate)
+            {
+                calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+            }
+            else if (m_StartDate != null && m_EndDate != null && buttonDate >= m_StartDate && buttonDate <= m_EndDate)
+            {
+                calenderButton.UpdateState(CalenderButton.State.Highlighted, buttonDate, m_StartDate, m_EndDate);
+            }
         }
     }
 

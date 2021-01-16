@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class uGUITools : MonoBehaviour {
 	[MenuItem("uGUI/Anchors to Corners %[")]
 	static void AnchorsToCorners(){
@@ -94,3 +95,4 @@ public class uGUITools : MonoBehaviour {
 		}
 	}
 }
+#endif

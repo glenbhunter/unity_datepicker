@@ -28,6 +28,7 @@ public class Single_DateRangePicker : MonoBehaviour
         m_Calender.PointerEnter = OnPointerEnter;
         m_Calender.PointerDown = OnPointerDown;
         m_Calender.PointerExit = OnPointerExit;
+        m_Calender.CalenderRefreshed = OnCalenderRefreshed;
         m_Calender.Setup(DateTime.Now.Year, DateTime.Now.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
     }
 
@@ -67,6 +68,24 @@ public class Single_DateRangePicker : MonoBehaviour
             return;
         }
 
+
+        if (m_StartDate != null && chosenDate < m_StartDate && m_EndDate == null)
+        {
+            if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
+            {
+                // revert previous selected start date
+                m_StartDate_SelectedBTN.ResetToOriginal();
+
+                m_StartDate = chosenDate;
+                m_StartDate_SelectedBTN = chosenCalenderButton;
+
+                CalendersUpdated?.Invoke(m_StartDate, m_EndDate);
+                chosenCalenderButton.UpdateState(CalenderButton.State.Selected, chosenDate, m_StartDate, m_EndDate);
+            }
+
+            return;
+        }
+
         // initiate second click
         if (m_StartDate != null && m_EndDate == null)
         {
@@ -85,7 +104,7 @@ public class Single_DateRangePicker : MonoBehaviour
                 calenderButton = m_Calender.CalenderButtons.Where(x => x.Date == date && x.CurrentState != CalenderButton.State.Disabled).FirstOrDefault();
             
 
-                if (calenderButton != null && DateIsInCalenderMonth(date, m_Calender.Date))
+                if (calenderButton != null)
                 {
                     calenderButton.UpdateState(CalenderButton.State.Highlighted, date, m_StartDate, m_EndDate);
                 }
@@ -96,6 +115,38 @@ public class Single_DateRangePicker : MonoBehaviour
             CalendersUpdated?.Invoke(m_StartDate, m_EndDate);
 
             return;
+        }
+    }
+
+    /// <summary>
+    /// Generally called when the next month is shown on a calender
+    /// </summary>
+    public void OnCalenderRefreshed(DateTime calenderDate, CalenderButton calenderButton, DateTime buttonDate)
+    {
+        // single selection
+        if (m_StartDate != null && m_StartDate == buttonDate && m_EndDate == null)
+        {
+            calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+        }
+        // single selection but we also need to show highlight
+        else if (m_StartDate != null && m_StartDate == buttonDate)
+        {
+            calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+            calenderButton.UpdateState(CalenderButton.State.Highlighted, buttonDate, m_StartDate, m_EndDate);
+        }
+        // single 'end' selection
+        else if (m_EndDate != null && m_EndDate == buttonDate && m_StartDate != null)
+        {
+            calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+            calenderButton.UpdateState(CalenderButton.State.Highlighted, buttonDate, m_StartDate, m_EndDate);
+        }
+        else if (m_EndDate != null && m_EndDate == buttonDate)
+        {
+            calenderButton.UpdateState(CalenderButton.State.Selected, buttonDate, m_StartDate, m_EndDate);
+        }
+        else if (m_StartDate != null && m_EndDate != null && buttonDate >= m_StartDate && buttonDate <= m_EndDate)
+        {
+            calenderButton.UpdateState(CalenderButton.State.Highlighted, buttonDate, m_StartDate, m_EndDate);
         }
     }
 
