@@ -196,7 +196,7 @@ public class Dual_DateRangePicker : MonoBehaviour
 
     public void OnClick_ToggleCalenders()
     {
-        FW_Calender.gameObject.SetActive(FW_Calender.gameObject.activeInHierarchy);
-        SW_Calender.gameObject.SetActive(SW_Calender.gameObject.activeInHierarchy);
+        FW_Calender.gameObject.SetActive(!FW_Calender.gameObject.activeInHierarchy);
+        SW_Calender.gameObject.SetActive(!SW_Calender.gameObject.activeInHierarchy);
     }
 }
