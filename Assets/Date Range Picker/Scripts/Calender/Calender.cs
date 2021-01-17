@@ -76,35 +76,6 @@ public class Calender : MonoBehaviour
                 CalenderRefreshed(Date, CalenderButtons[i], currentDate);
             }
 
-            /*
-            if (DateIsInCalenderMonth(currentDate, Date))
-            {
-                // single selection
-                if (startDate != null && startDate == currentDate && endDate == null)
-                {
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
-                }
-                // single selection but we also need to show highlight
-                else if (startDate != null && startDate == currentDate)
-                {
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
-                }
-                // single 'end' selection
-                else if (endDate != null && endDate == currentDate && startDate != null)
-                {
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
-                }
-                else if (endDate != null && endDate == currentDate)
-                {
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Selected, Date, startDate, endDate);
-                }
-                else if (startDate != null && endDate != null && currentDate >= startDate && currentDate <= endDate)
-                {
-                    CalenderButtons[i].UpdateState(CalenderButton.State.Highlighted, Date, startDate, endDate);
-                }
-            }*/
 
             currentDate = currentDate.AddDays(1);
         }
