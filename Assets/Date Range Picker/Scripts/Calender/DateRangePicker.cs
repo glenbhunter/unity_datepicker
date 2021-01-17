@@ -5,4 +5,8 @@ public class DateRangePicker : MonoBehaviour
 {
     public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
     public CalenderUpdate CalendersUpdated;
+
+    public virtual void Setup()
+    {
+    }
 }

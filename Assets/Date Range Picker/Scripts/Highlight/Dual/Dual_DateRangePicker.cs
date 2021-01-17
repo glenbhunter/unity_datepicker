@@ -22,7 +22,7 @@ public class Dual_DateRangePicker : DateRangePicker
         Setup();
     }
 
-    public void Setup()
+    public override void Setup()
     {
         FW_Calender.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         SW_Calender.Date = FW_Calender.Date.AddMonths(1);
@@ -44,7 +44,7 @@ public class Dual_DateRangePicker : DateRangePicker
 
     public void OnPointerEnter(CalenderButton chosenCalenderButton, Calender calender)
     {
-        if (chosenCalenderButton.CurrentState == CalenderButton.State.Normal && m_EndDate == null)
+        if (chosenCalenderButton.CurrentState == CalenderButton.State.Normal && m_EndDate == null && DateIsInCalenderMonth(chosenCalenderButton.Date, calender.Date))
         {
             chosenCalenderButton.UpdateState(CalenderButton.State.Hover, calender.Date, m_StartDate, m_EndDate);
         }

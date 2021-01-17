@@ -20,7 +20,7 @@ public class Single_DateRangePicker : DateRangePicker
         Setup();
     }
 
-    public void Setup()
+    public override void Setup()
     {
         m_Calender.PointerEnter = OnPointerEnter;
         m_Calender.PointerDown = OnPointerDown;

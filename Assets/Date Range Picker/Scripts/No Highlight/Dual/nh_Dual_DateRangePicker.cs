@@ -23,7 +23,7 @@ public class nh_Dual_DateRangePicker : DateRangePicker
         Setup();
     }
 
-    public void Setup()
+    public override void Setup()
     {
         FW_Calender.Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         SW_Calender.Date = FW_Calender.Date.AddMonths(1);
