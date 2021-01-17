@@ -179,7 +179,6 @@ public class Single_DateRangePicker : MonoBehaviour
     public void OnClick_NextCalenderYear()
     {
         m_Calender.Date = m_Calender.Date.AddYears(1);
-        m_Calender.Date = m_Calender.Date.AddYears(1);
 
         m_Calender.Setup(m_Calender.Date.Year, m_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
         m_Calender.Setup(m_Calender.Date.Year, m_Calender.Date.Month, m_FirstDayOfWeek, m_ShowDaysInOtherMonths, m_StartDate, m_EndDate, UITweenManager);
