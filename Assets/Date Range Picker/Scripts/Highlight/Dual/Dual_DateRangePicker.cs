@@ -82,7 +82,7 @@ public class Dual_DateRangePicker : DateRangePicker
 
 
         // revert, if second date is selected is less that the first chosen ddate
-        if (m_StartDate != null && chosenDate < m_StartDate && m_EndDate == null)
+        if (m_StartDate != null && chosenDate <= m_StartDate && m_EndDate == null)
         {
             if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
             {

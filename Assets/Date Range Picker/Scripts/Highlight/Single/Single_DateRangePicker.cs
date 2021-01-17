@@ -66,7 +66,7 @@ public class Single_DateRangePicker : DateRangePicker
         }
 
 
-        if (m_StartDate != null && chosenDate < m_StartDate && m_EndDate == null)
+        if (m_StartDate != null && chosenDate <= m_StartDate && m_EndDate == null)
         {
             if (chosenCalenderButton.CurrentState != CalenderButton.State.Disabled)
             {

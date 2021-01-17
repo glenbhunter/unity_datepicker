@@ -10,7 +10,7 @@ using UnityEngine.Events;
     public class UITweenManager : MonoBehaviour
     {
         private List<UIItem> m_TweeningItems = new List<UIItem>();
-       
+
         public void Tween(Text textComponent, Color32 to, UnityAction onComplete, float duration = 1)
         {
             int instanceId = textComponent.GetInstanceID();
