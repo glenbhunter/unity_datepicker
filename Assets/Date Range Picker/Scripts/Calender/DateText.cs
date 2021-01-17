@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Dual_DateText : MonoBehaviour
+public class DateText : MonoBehaviour
 {
-    [SerializeField] Dual_DateRangePicker m_DatePicker;
+    [SerializeField] DateRangePicker m_DatePicker;
     [SerializeField] Text m_DateText;
 
     private void Start()
@@ -16,12 +16,12 @@ public class Dual_DateText : MonoBehaviour
     {
         string text = "";
 
-        if(selectedStartDate != null)
+        if (selectedStartDate != null)
         {
             text += selectedStartDate.Value.ToShortDateString();
         }
 
-        if(selectedEndDate != null)
+        if (selectedEndDate != null)
         {
             text += " - " + selectedEndDate.Value.ToShortDateString();
         }

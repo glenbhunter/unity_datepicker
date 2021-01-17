@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Single_DateRangePicker : MonoBehaviour
+public class Single_DateRangePicker : DateRangePicker
 {
     [SerializeField] DayOfWeek m_FirstDayOfWeek = DayOfWeek.Monday;
 
@@ -14,9 +14,6 @@ public class Single_DateRangePicker : MonoBehaviour
     private DateTime? m_StartDate;
     private CalenderButton m_StartDate_SelectedBTN;
     private DateTime? m_EndDate;
-
-    public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
-    public CalenderUpdate CalendersUpdated;
 
     private void Start()
     {

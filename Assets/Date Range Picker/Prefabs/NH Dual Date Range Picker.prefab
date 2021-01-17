@@ -25891,8 +25891,8 @@ GameObject:
   - component: {fileID: 6838321074604681502}
   - component: {fileID: 6838321074604681493}
   - component: {fileID: 6838321074604681498}
-  - component: {fileID: 6838321074604681499}
   - component: {fileID: 6838321074604681496}
+  - component: {fileID: 6838321075157010209}
   m_Layer: 5
   m_Name: NH Dual Date Range Picker
   m_TagString: Untagged
@@ -26008,20 +26008,6 @@ MonoBehaviour:
   - {fileID: 6838321073894818446}
   - {fileID: 6838321074689854572}
   m_Spawn: 0
---- !u!114 &6838321074604681499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6838321074604681500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c30be4ed5de14499a5ac3300bac8fa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_DatePicker: {fileID: 6838321074604681493}
-  m_DateText: {fileID: 6838321074942816141}
 --- !u!114 &6838321074604681496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26034,6 +26020,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d1a497fe0d8d425182df5d6dd7f8a3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6838321075157010209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6838321074604681500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f2ba0573c8c248e8bdd84ad35bd9466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DatePicker: {fileID: 6838321074604681493}
+  m_DateText: {fileID: 6838321074942816141}
 --- !u!1 &6838321074607418021
 GameObject:
   m_ObjectHideFlags: 0

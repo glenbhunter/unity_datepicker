@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-
 using System;
 
 public class HighlightedDisplayState : DisplayState
@@ -21,7 +19,6 @@ public class HighlightedDisplayState : DisplayState
         {
             SecondaryImage.sprite = m_InBetween_Dates_HighlightSprite;
             PrimaryImage.color = Color.clear;
-            Debug.Log("here");
         }
         else if(buttonDate == selectedEndDate)
         {

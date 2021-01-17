@@ -1672,11 +1672,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7537777000348027288, guid: 4d1dbdcaddcd0400c8b5eff75d948d5c,
-        type: 3}
-      propertyPath: m_ShowDaysInOtherMonths
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7537777000348027293, guid: 4d1dbdcaddcd0400c8b5eff75d948d5c,
         type: 3}
       propertyPath: m_Pivot.x

@@ -3,7 +3,7 @@
 using System;
 using System.Linq;
 
-public class Dual_DateRangePicker : MonoBehaviour
+public class Dual_DateRangePicker : DateRangePicker
 {
     // FW == First Window Calender
     // SW == Second Window Calender
@@ -12,9 +12,6 @@ public class Dual_DateRangePicker : MonoBehaviour
     [SerializeField] Calender FW_Calender;
     [SerializeField] Calender SW_Calender;
     [SerializeField] UITweenManager UITweenManager;
-
-    public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
-    public CalenderUpdate CalendersUpdated;
 
     private DateTime? m_StartDate;
     private CalenderButton m_StartDate_SelectedBTN;

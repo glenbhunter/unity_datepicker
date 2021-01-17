@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// nh - no highlight date picker
 /// </summary>
-public class nh_Single_DateRangePicker : MonoBehaviour
+public class nh_Single_DateRangePicker : DateRangePicker
 {
     [SerializeField] DayOfWeek m_FirstDayOfWeek = DayOfWeek.Monday;
 
@@ -18,9 +18,6 @@ public class nh_Single_DateRangePicker : MonoBehaviour
     private CalenderButton m_StartDate_SelectedBTN;
     private DateTime? m_EndDate;
     private CalenderButton m_EndDate_SelectedBTN;
-
-    public delegate void CalenderUpdate(DateTime? selectedStartDate, DateTime? selectedEndDate);
-    public CalenderUpdate CalendersUpdated;
 
     private void Start()
     {
