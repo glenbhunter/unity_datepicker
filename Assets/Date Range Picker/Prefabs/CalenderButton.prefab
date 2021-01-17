@@ -293,11 +293,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97bc0f2fe435e4363ae1d19951bfbc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelectionDate_HighlightSprite: {fileID: 21300000, guid: dc94ab512ebec45028d7b49b74dd6c87,
+  m_FirstSelectionDate_HighlightSprite: {fileID: 21300000, guid: 51bcd696195bd457cb17aaf20b0f2ee3,
     type: 3}
-  m_InBetween_Dates_HighlightSprite: {fileID: 21300000, guid: 544254c1339e04932b784967aebaa1d7,
+  m_InBetween_Dates_HighlightSprite: {fileID: 21300000, guid: 7ae9bf0f40b8645789df112f2576400a,
     type: 3}
-  m_LastSelectionDate_HighlightSprite: {fileID: 21300000, guid: b7e53227f9fbe49bf9c00a2804c8322f,
+  m_LastSelectionDate_HighlightSprite: {fileID: 21300000, guid: efcdc93ca6c2a485cbd892c3e4941922,
     type: 3}
   m_Highlight_Image_Color:
     serializedVersion: 2
