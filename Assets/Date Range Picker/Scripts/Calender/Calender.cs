@@ -104,24 +104,7 @@ public class Calender : MonoBehaviour
 
             // start current date based upon start day of week
             // this is used to show previous dates before
-            int dayIndex = (int)m_FirstDayOfWeek;
-            int daysBehind = 0;
-
-            for (int i = 0; i < 6; i++)
-            {
-                dayIndex++;
-                daysBehind++;
-
-                if (dayIndex > 6)
-                {
-                    dayIndex = 0;
-                }
-
-                if (dayIndex == (int)firstDayOfMonth)
-                {
-                    return currentDate = currentDate.AddDays(-daysBehind);
-                }
-            }
+            return currentDate = currentDate.AddDays(-(firstDayOfMonth + 7 - m_FirstDayOfWeek));
         }
         else
         {
